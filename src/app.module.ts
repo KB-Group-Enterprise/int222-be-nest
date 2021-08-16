@@ -5,6 +5,8 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CarsModule } from './cars/cars.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     CarsModule,
@@ -15,6 +17,8 @@ import { CarsModule } from './cars/cars.module';
       debug: true,
       autoSchemaFile: true,
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
