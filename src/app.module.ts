@@ -9,6 +9,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { GamesModule } from './games/games.module';
 >>>>>>> 79eb7c3 ([Moved] all module from component to src)
 import { CarsModule } from './cars/cars.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     CarsModule,
@@ -20,10 +22,15 @@ import { CarsModule } from './cars/cars.module';
       autoSchemaFile: true,
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     GamesModule,
     CarsModule,
 >>>>>>> 79eb7c3 ([Moved] all module from component to src)
+=======
+    AuthModule,
+    UsersModule,
+>>>>>>> 1ad6296 ([Add] User, Role, RestoreQuestion  Entities)
   ],
   controllers: [AppController],
   providers: [AppService],
