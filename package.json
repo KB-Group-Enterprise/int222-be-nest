@@ -32,7 +32,11 @@
     "class-transformer": "^0.4.0",
 =======
     "bcrypt": "^5.0.1",
+<<<<<<< HEAD
 >>>>>>> 336b333 ([Update] user entity, createUser [NOT FINISH)
+=======
+    "brcypt": "^1.0.1",
+>>>>>>> f2a2f51 ([Update] mutation can create user now)
     "class-validator": "^0.13.1",
     "graphql": "^15.5.1",
     "mysql": "^2.18.1",
