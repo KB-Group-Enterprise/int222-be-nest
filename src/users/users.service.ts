@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import {
   ConflictException,
   Injectable,
@@ -58,5 +58,11 @@ export class UsersService {
   }
   async generateHashPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, 10);
+  }
+  async verifyPassword(password: string, user: User): Promise<boolean> {
+    return await bcrypt.compare(password, user.password);
+  }
+  async findUserByUsername(username: string): Promise<User> {
+    return await this.userRepository.findOne({ username: username });
   }
 }

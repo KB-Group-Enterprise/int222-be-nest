@@ -9,5 +9,6 @@ import { RestoreQuestion } from './entities/restore-question.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Role, RestoreQuestion])],
   providers: [UsersService, UsersResolver],
+  exports: [UsersService],
 })
 export class UsersModule {}
