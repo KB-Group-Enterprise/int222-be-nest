@@ -32,6 +32,7 @@
     "@types/passport-jwt": "^3.0.6",
     "apollo-server-express": "2.x.x",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "class-transformer": "^0.4.0",
 =======
     "bcrypt": "^5.0.1",
@@ -40,6 +41,10 @@
 =======
     "brcypt": "^1.0.1",
 >>>>>>> f2a2f51 ([Update] mutation can create user now)
+=======
+    "bcrypt": "^5.0.1",
+    "class-transformer": "^0.4.0",
+>>>>>>> c116621 ([Add] bcrypt)
     "class-validator": "^0.13.1",
     "graphql": "^15.5.1",
     "mysql": "^2.18.1",
