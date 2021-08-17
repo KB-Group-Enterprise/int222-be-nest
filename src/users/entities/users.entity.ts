@@ -1,5 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { RestoreQuestion } from './restore-question.entity';
 import { Role } from './role.entity';
 
@@ -19,19 +25,26 @@ export class User {
   password: string;
 
   @ManyToOne((type) => Role, (role) => role.users)
-  @Field((type) => Int)
-  role: number;
+  @JoinColumn()
+  @Field((type) => Role)
+  role: Role;
 
   @ManyToOne(
     (type) => RestoreQuestion,
     (restoreQuestion) => restoreQuestion.users,
   )
-  @Field((type) => String)
-  question: string;
+  @Field((type) => RestoreQuestion)
+  question: RestoreQuestion;
 
+  @Column({ name: 'restoreanswer' })
   @Field((type) => String)
-  restore_answer: string;
+  restoreAnswer: string;
 
-  @Field((type) => String)
-  refresh_token: string;
+  @Column({ name: 'refreshtoken' })
+  @Field((type) => String, { nullable: true })
+  refreshToken: string;
+
+  @Column({ name: 'refreshtokenexp' })
+  @Field((type) => String, { nullable: true })
+  refreshTokenExp: string;
 }
