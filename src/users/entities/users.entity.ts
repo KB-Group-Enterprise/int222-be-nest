@@ -36,15 +36,15 @@ export class User {
   @Field((type) => RestoreQuestion)
   question: RestoreQuestion;
 
-  @Column({ name: 'restoreanswer' })
-  @Field((type) => String)
-  restoreAnswer: string;
+  // @Column({ name: 'restoreanswer' })
+  // @Field((type) => String)
+  // restoreAnswer?: string;
 
-  @Column({ name: 'refreshtoken' })
-  @Field((type) => String, { nullable: true })
-  refreshToken: string;
+  // @Column({ name: 'refreshtoken' })
+  // @Field((type) => String, { nullable: true })
+  // refreshToken?: string;
 
-  @Column({ name: 'refreshtokenexp' })
-  @Field((type) => String, { nullable: true })
-  refreshTokenExp: string;
+  // @Column({ name: 'refreshtokenexp' })
+  // @Field((type) => String, { nullable: true })
+  // refreshTokenExp?: string;
 }

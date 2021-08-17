@@ -21,9 +21,11 @@ export class UsersService {
   ) {}
 
   async getAllUser() {
-    return await this.userRepository.find().catch((err) => {
-      throw new NotFoundException();
-    });
+    return await this.userRepository
+      .find({ relations: ['role'] })
+      .catch((err) => {
+        throw new NotFoundException();
+      });
   }
 
   async createUser(newUserData: RegisterInput): Promise<User> {
@@ -37,21 +39,14 @@ export class UsersService {
     newUserData.password = await this.generateHashPassword(
       newUserData.password,
     );
-    const user = this.userRepository.create(newUserData);
-    await this.userRepository.save(user).catch((err) => {
-      throw new InternalServerErrorException();
-    });
-    const newUser = await this.userRepository.findOne(
-      { userId: user.userId },
-      {
-        relations: ['role', 'question'],
-      },
-    );
+    const newUser = this.userRepository.create(newUserData);
     const reviewerRole = await this.roleRepository.findOne({
       roleName: 'reviewer',
     });
-    reviewerRole.users = [newUser];
     newUser.role = reviewerRole;
+    await this.userRepository.save(newUser).catch((err) => {
+      throw new InternalServerErrorException(err);
+    });
     return newUser;
   }
   async generateHashPassword(password: string): Promise<string> {

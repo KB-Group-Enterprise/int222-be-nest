@@ -1,14 +1,19 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './users.entity';
 
 @Entity({ name: 'restore_question' })
+@ObjectType()
 export class RestoreQuestion {
   @PrimaryGeneratedColumn('increment')
+  @Field()
   questionId: number;
 
   @Column()
+  @Field()
   question: string;
 
   @OneToMany((type) => User, (user) => user.question)
+  @Field((type) => [User])
   users: User[];
 }
