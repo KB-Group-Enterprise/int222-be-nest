@@ -4,9 +4,10 @@ import { User } from './entities/users.entity';
 import { UsersService } from './users.service';
 import { UsersResolver } from './users.resolver';
 import { Role } from './entities/role.entity';
+import { RestoreQuestion } from './entities/restore-question.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Role])],
+  imports: [TypeOrmModule.forFeature([User, Role, RestoreQuestion])],
   providers: [UsersService, UsersResolver],
 })
 export class UsersModule {}

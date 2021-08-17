@@ -33,18 +33,18 @@ export class User {
     (type) => RestoreQuestion,
     (restoreQuestion) => restoreQuestion.users,
   )
-  @Field((type) => RestoreQuestion)
+  @Field((type) => RestoreQuestion, { nullable: false })
   question: RestoreQuestion;
 
-  // @Column({ name: 'restoreanswer' })
-  // @Field((type) => String)
-  // restoreAnswer?: string;
+  @Column({ name: 'restoreanswer', nullable: false })
+  @Field((type) => String)
+  restoreAnswer: string;
 
-  // @Column({ name: 'refreshtoken' })
-  // @Field((type) => String, { nullable: true })
-  // refreshToken?: string;
+  @Column({ name: 'refreshtoken', nullable: true })
+  @Field((type) => String, { nullable: true })
+  refreshToken?: string;
 
-  // @Column({ name: 'refreshtokenexp' })
-  // @Field((type) => String, { nullable: true })
-  // refreshTokenExp?: string;
+  @Column({ name: 'refreshtokenexp', nullable: true })
+  @Field((type) => String, { nullable: true })
+  refreshTokenExp?: string;
 }
