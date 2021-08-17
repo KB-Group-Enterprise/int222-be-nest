@@ -11,6 +11,7 @@ import { RegisterInput } from './dto/inputs/register.input';
 import { Role } from './entities/role.entity';
 import { User } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
+import { RestoreQuestion } from './entities/restore-question.entity';
 @Injectable()
 export class UsersService {
   constructor(
@@ -18,11 +19,13 @@ export class UsersService {
     private userRepository: Repository<User>,
     @InjectRepository(Role)
     private roleRepository: Repository<Role>,
+    @InjectRepository(RestoreQuestion)
+    private questionRepository: Repository<RestoreQuestion>,
   ) {}
 
   async getAllUser() {
     return await this.userRepository
-      .find({ relations: ['role'] })
+      .find({ relations: ['role', 'question'] })
       .catch((err) => {
         throw new NotFoundException();
       });
@@ -40,10 +43,14 @@ export class UsersService {
       newUserData.password,
     );
     const newUser = this.userRepository.create(newUserData);
+    const question = await this.questionRepository.findOne({
+      questionId: newUserData.questionId,
+    });
     const reviewerRole = await this.roleRepository.findOne({
       roleName: 'reviewer',
     });
     newUser.role = reviewerRole;
+    newUser.question = question;
     await this.userRepository.save(newUser).catch((err) => {
       throw new InternalServerErrorException(err);
     });
