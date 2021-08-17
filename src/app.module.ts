@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ComponentsModule } from './components/components.module';
+import { GamesModule } from './games/games.module';
+import { CarsModule } from './cars/cars.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -14,7 +15,8 @@ import { ComponentsModule } from './components/components.module';
       debug: true,
       autoSchemaFile: true,
     }),
-    ComponentsModule,
+    GamesModule,
+    CarsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

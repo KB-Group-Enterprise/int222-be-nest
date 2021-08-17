@@ -1,5 +1,5 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Publisher } from 'src/components/games/entities/publisher.entity';
+import { Publisher } from 'src/games/entities/publisher.entity';
 import {
   Column,
   Entity,
