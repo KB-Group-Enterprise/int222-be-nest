@@ -6,8 +6,11 @@ import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { GamesModule } from './games/games.module';
 import { CarsModule } from './cars/cars.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 @Module({
   imports: [
+    CarsModule,
     ConfigModule.forRoot(),
     DatabaseModule,
     GraphQLModule.forRoot({
@@ -17,6 +20,8 @@ import { CarsModule } from './cars/cars.module';
     }),
     GamesModule,
     CarsModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

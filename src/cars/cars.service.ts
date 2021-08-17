@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { GetCarArgs } from './dto/args/get-car.args';
 import { DeleteCarInput } from './dto/inputs/delete-car.input';
 import { NewCarInput } from './dto/inputs/new-car.input';
