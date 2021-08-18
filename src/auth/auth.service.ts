@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
@@ -8,6 +9,7 @@ export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async login(username: string, password: string): Promise<User> {
@@ -18,11 +20,13 @@ export class AuthService {
       throw new UnauthorizedException('Your username or password is wrong');
     return user;
   }
-  generateToken(user: User): string {
+  async generateToken(user: User): Promise<string> {
     const payload = {
       sub: user.userId,
       username: user.username,
     };
-    return this.jwtService.sign(payload);
+    return await this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_SECRET'),
+    });
   }
 }

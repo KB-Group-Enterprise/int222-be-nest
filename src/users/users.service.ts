@@ -63,6 +63,9 @@ export class UsersService {
     return await bcrypt.compare(password, user.password);
   }
   async findUserByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne({ username: username });
+    return await this.userRepository.findOne(
+      { username: username },
+      { relations: ['role', 'question'] },
+    );
   }
 }

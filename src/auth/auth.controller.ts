@@ -1,29 +1,35 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
+import { JwtAuthGuard } from './guards/jwt-guard';
+import { LocalAuthGuard } from './guards/local-guard';
 
 type token = {
-  access_token: string;
-  refresh_token: string;
+  token: string;
 };
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('login')
-  @UseGuards(AuthGuard('local'))
-  public login(
+  @UseGuards(LocalAuthGuard)
+  public async login(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): string {
-    const access_token = this.authService.generateToken(req.user as User);
-    const tokens = {
-      access_token,
-      refresh_token: '',
+  ): Promise<token> {
+    const access_token = await this.authService.generateToken(req.user as User);
+    const refresh_token = '';
+    const responseToken = {
+      token: access_token,
     };
-    res.cookie('auth-token', tokens, { httpOnly: true });
-    return 'login success';
+    res.cookie('rft', refresh_token, { httpOnly: true });
+    return responseToken;
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@Req() req: Request) {
+    return req.user;
   }
 }
