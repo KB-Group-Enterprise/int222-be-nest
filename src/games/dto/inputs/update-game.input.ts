@@ -1,11 +1,14 @@
-import { Field, Float, InputType } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
 import { IsAlphanumeric } from 'class-validator';
 import { IGame } from 'src/games/interface/game';
 import { CategoryInput } from './category.input';
 import { PublisherInput } from './publisher.input';
 import { RetailerInput } from './retailer.input';
 @InputType()
-export class NewGameInput implements IGame {
+export class UpdateGameInput implements IGame {
+  @Field((type) => Int)
+  gameId: number;
+
   @Field()
   @IsAlphanumeric()
   gameName: string;

@@ -9,12 +9,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IGame } from '../interface/game';
 import { Category } from './category.entity';
 import { Retailer } from './retailer.entity';
 
 @Entity({ name: 'games' })
 @ObjectType()
-export class Game {
+export class Game implements IGame {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   gameId: number;
