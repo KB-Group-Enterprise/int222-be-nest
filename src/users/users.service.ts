@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RegisterInput } from './dto/inputs/register.input';
+import { RegisterInput } from '../auth/dto/inputs/register.input';
 import { Role } from './entities/role.entity';
 import { User } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
@@ -67,5 +67,25 @@ export class UsersService {
       { username: username },
       { relations: ['role', 'question'] },
     );
+  }
+  async findUserByIdAndUpdate(userId: string, updateData: any) {
+    await this.userRepository.update(userId, updateData).catch((err) => {
+      console.log(err);
+    });
+  }
+  async findUserByUserIdAndRefreshToken(
+    userId: string,
+    refreshToken: string,
+  ): Promise<User | null> {
+    const today = new Date().getTime();
+    const user = await this.userRepository.findOne({
+      userId: userId,
+      refreshToken: refreshToken,
+    });
+    if (!user) return null;
+    if (user.refreshTokenExp) {
+      if (Number(user.refreshTokenExp) < today) return null;
+    }
+    return user;
   }
 }

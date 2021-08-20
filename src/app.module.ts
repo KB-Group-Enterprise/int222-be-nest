@@ -15,6 +15,7 @@ import { UsersModule } from './users/users.module';
     CarsModule,
     DatabaseModule,
     GraphQLModule.forRoot({
+      context: ({ req, res }) => ({ req, res }),
       playground: true,
       debug: true,
       autoSchemaFile: true,

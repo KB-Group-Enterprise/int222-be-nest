@@ -1,18 +1,16 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNotEmpty, Max, Min } from 'class-validator';
+import { IsNotEmpty, Length, Max, Min } from 'class-validator';
 
 @InputType()
 export class RegisterInput {
   @Field((type) => String)
   @IsNotEmpty()
-  @Min(4)
-  @Max(16)
+  @Length(4, 20)
   username: string;
 
   @Field((type) => String)
   @IsNotEmpty()
-  @Min(8)
-  @Max(20)
+  @Length(8, 20)
   password: string;
 
   @Field((type) => String)
