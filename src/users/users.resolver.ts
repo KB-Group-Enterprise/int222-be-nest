@@ -7,6 +7,7 @@ import { User } from './entities/users.entity';
 import { UsersService } from './users.service';
 import { UserOutput } from './dto/outputs/user.output';
 import { RestoreQuestion } from './entities/restore-question.entity';
+import { DeleteUserInput } from './dto/inputs/delete-user.input';
 
 @Resolver()
 export class UsersResolver {
@@ -33,5 +34,10 @@ export class UsersResolver {
   async questions(): Promise<RestoreQuestion[]> {
     const question = await this.userService.getAllQuestion();
     return question;
+  }
+  @Mutation((returns) => Boolean)
+  async deleteUser(@Args('deleteData') deleteData: DeleteUserInput) {
+    await this.userService.deleteUserByUserId(deleteData.userId);
+    return true;
   }
 }

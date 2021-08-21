@@ -33,6 +33,11 @@ export class UsersService {
   }
 
   async createUser(newUserData: RegisterInput): Promise<User> {
+    const usernameRegex = /^[a-zA-Z]+\d*\w*/;
+    if (!usernameRegex.test(newUserData.username))
+      throw new BadRequestException(
+        'Your username must only contain character or number',
+      );
     const existUser = await this.userRepository.findOne({
       username: newUserData.username,
     });
@@ -99,5 +104,9 @@ export class UsersService {
     await this.findUserByIdAndUpdate(user.userId, {
       password: hashNewPassword,
     });
+  }
+
+  async deleteUserByUserId(userId: string) {
+    await this.userRepository.delete(userId);
   }
 }
