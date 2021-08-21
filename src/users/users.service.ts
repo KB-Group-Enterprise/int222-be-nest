@@ -1,4 +1,4 @@
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import {
   ConflictException,
   Injectable,
@@ -12,6 +12,7 @@ import { Role } from './entities/role.entity';
 import { User } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
 import { RestoreQuestion } from './entities/restore-question.entity';
+import { ForgotPasswordInput } from 'src/auth/dto/inputs/forget-password.input';
 @Injectable()
 export class UsersService {
   constructor(
@@ -68,12 +69,35 @@ export class UsersService {
       { relations: ['role', 'question'] },
     );
   }
-  async findUserByIdAndUpdate(userId: string, updateData: any) {
+  async findUserByIdAndUpdate(
+    userId: string,
+    updateData: any,
+  ): Promise<boolean> {
     await this.userRepository.update(userId, updateData).catch((err) => {
-      console.log(err);
+      return false;
     });
+    return true;
   }
   async findUserByUserId(userId: string): Promise<User> {
     return await this.userRepository.findOne({ userId });
+  }
+
+  async getAllQuestion(): Promise<RestoreQuestion[]> {
+    return await this.questionRepository.find();
+  }
+
+  async forgotPassword(newData: ForgotPasswordInput) {
+    const user = await this.userRepository.findOne({
+      userId: newData.userId,
+    });
+    if (!user) throw new NotFoundException();
+    if (user.restoreAnswer !== newData.restoreAnswer)
+      throw new BadRequestException("Your answer doesn't match");
+    const hashNewPassword = await this.generateHashPassword(
+      newData.newPassword,
+    );
+    await this.findUserByIdAndUpdate(user.userId, {
+      password: hashNewPassword,
+    });
   }
 }

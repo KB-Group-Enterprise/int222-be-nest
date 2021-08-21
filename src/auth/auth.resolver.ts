@@ -6,6 +6,7 @@ import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user';
 import { CredentialInput } from './dto/inputs/credential.input';
+import { ForgotPasswordInput } from './dto/inputs/forget-password.input';
 import { RegisterInput } from './dto/inputs/register.input';
 import { GqlAuthGuard } from './guards/gql-guard';
 import { RefreshAuthGuard } from './guards/refresh-guard';
@@ -72,7 +73,25 @@ export class AuthResolver {
 
   @UseGuards(GqlAuthGuard)
   @Mutation((returns) => Boolean)
-  async logout(@CurrentUser() user: User): Promise<boolean> {
-    return await this.authService.invokeRefreshToken(user.userId);
+  async logout(
+    @CurrentUser() user: User,
+    @Context() context: any,
+  ): Promise<boolean> {
+    const res = context.res as Response;
+    const isInvokeRefreshToken = await this.authService.invokeRefreshToken(
+      user.userId,
+    );
+    if (!isInvokeRefreshToken) return false;
+    res.clearCookie('act');
+    res.clearCookie('rft');
+    return true;
+  }
+
+  @Mutation((returns) => String)
+  async forgotPassword(
+    @Args('newData') newData: ForgotPasswordInput,
+  ): Promise<string> {
+    await this.authService.changePassword(newData);
+    return 'Reset Password success';
   }
 }

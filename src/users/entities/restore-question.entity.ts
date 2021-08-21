@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './users.entity';
 
@@ -6,11 +6,11 @@ import { User } from './users.entity';
 @ObjectType()
 export class RestoreQuestion {
   @PrimaryGeneratedColumn('increment')
-  @Field()
+  @Field((type) => Int)
   questionId: number;
 
   @Column()
-  @Field()
+  @Field((type) => String)
   question: string;
 
   @OneToMany((type) => User, (user) => user.question)

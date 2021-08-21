@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -7,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
+import { ForgotPasswordInput } from './dto/inputs/forget-password.input';
 import { RegisterInput } from './dto/inputs/register.input';
 @Injectable()
 export class AuthService {
@@ -71,5 +73,13 @@ export class AuthService {
       refreshTokenCount: user.refreshTokenCount,
     });
     return true;
+  }
+
+  async changePassword(data: ForgotPasswordInput): Promise<void> {
+    const isInvokeRefreshToken = await this.invokeRefreshToken(data.userId);
+    if (isInvokeRefreshToken) await this.userService.forgotPassword(data);
+    else {
+      throw new BadRequestException('Something wrong with your information');
+    }
   }
 }
