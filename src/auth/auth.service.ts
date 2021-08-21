@@ -1,9 +1,12 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/users.entity';
 import { UsersService } from 'src/users/users.service';
-import * as randomToken from 'rand-token';
 import { RegisterInput } from './dto/inputs/register.input';
 @Injectable()
 export class AuthService {
@@ -33,29 +36,40 @@ export class AuthService {
       username: user.username,
     };
     return await this.jwtService.signAsync(payload, {
-      secret: this.configService.get('JWT_SECRET'),
+      secret: this.configService.get('JWT_ACCESS_TOKEN'),
+      expiresIn: '15min',
     });
   }
   async generateRefreshToken(userId: string): Promise<string> {
-    const refreshToken = randomToken.generate(16);
-    const today = new Date();
-    today.setDate(today.getDate() + 7);
-    const refreshTokenExp = today.getTime();
-    await this.userService.findUserByIdAndUpdate(userId, {
+    const user = await this.userService.findUserByUserId(userId);
+    if (!user) throw new NotFoundException('UserId invalid');
+    const payload = {
+      count: user.refreshTokenCount,
+      sub: userId,
+    };
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN'),
+      expiresIn: '7d',
+    });
+    await this.userService.findUserByIdAndUpdate(user.userId, {
       refreshToken,
-      refreshTokenExp,
     });
     return refreshToken;
   }
-  async validateRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ): Promise<User> {
-    const user = this.userService.findUserByUserIdAndRefreshToken(
-      userId,
-      refreshToken,
-    );
+  async validateRefreshToken(userId: string, count: number): Promise<User> {
+    const user = await this.userService.findUserByUserId(userId);
     if (!user) throw new UnauthorizedException();
+    if (user.refreshTokenCount !== count) throw new UnauthorizedException();
     return user;
+  }
+
+  async invokeRefreshToken(userId: string): Promise<boolean> {
+    const user = await this.userService.findUserByUserId(userId);
+    if (!user) return false;
+    user.refreshTokenCount += 1;
+    await this.userService.findUserByIdAndUpdate(userId, {
+      refreshTokenCount: user.refreshTokenCount,
+    });
+    return true;
   }
 }

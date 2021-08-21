@@ -44,7 +44,7 @@ export class User {
   @Field((type) => String, { nullable: true })
   refreshToken?: string;
 
-  @Column({ name: 'refreshtokenexp', nullable: true })
-  @Field((type) => String, { nullable: true })
-  refreshTokenExp?: string;
+  @Column({ name: 'refreshtoken_count', nullable: true, default: 0 })
+  @Field((type) => Number, { nullable: true })
+  refreshTokenCount?: number;
 }

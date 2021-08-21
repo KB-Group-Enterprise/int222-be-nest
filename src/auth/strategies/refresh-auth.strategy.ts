@@ -14,28 +14,20 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
   ) {
     super({
       ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_SECRET'),
-      passReqToCallback: true,
+      secretOrKey: configService.get('JWT_REFRESH_TOKEN'),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
-          const access_token = req?.cookies['act'];
-          if (access_token) return access_token;
+          const refresh_token = req?.cookies['rft'];
+          if (refresh_token) return refresh_token;
         },
       ]),
     });
   }
-  async validate(
-    req: Request,
-    payload: { username: string; sub: string },
-  ): Promise<User> {
-    const refresh_token = req?.cookies['rft'];
-    if (!refresh_token) throw new UnauthorizedException();
-
+  async validate(payload: { count: number; sub: string }): Promise<User> {
     const user = await this.authService.validateRefreshToken(
       payload.sub,
-      refresh_token,
+      payload.count,
     );
-    if (!user) throw new UnauthorizedException();
 
     return user;
   }

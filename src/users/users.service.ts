@@ -73,19 +73,7 @@ export class UsersService {
       console.log(err);
     });
   }
-  async findUserByUserIdAndRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ): Promise<User | null> {
-    const today = new Date().getTime();
-    const user = await this.userRepository.findOne({
-      userId: userId,
-      refreshToken: refreshToken,
-    });
-    if (!user) return null;
-    if (user.refreshTokenExp) {
-      if (Number(user.refreshTokenExp) < today) return null;
-    }
-    return user;
+  async findUserByUserId(userId: string): Promise<User> {
+    return await this.userRepository.findOne({ userId });
   }
 }
