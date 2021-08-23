@@ -18,7 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "seed": "ts-node -r tsconfig-paths/register src/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -38,6 +39,7 @@
 =======
     "bcrypt": "^5.0.1",
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 336b333 ([Update] user entity, createUser [NOT FINISH)
 =======
     "brcypt": "^1.0.1",
@@ -50,6 +52,9 @@
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
 >>>>>>> feature/auth
+=======
+    "class-transformer": "^0.4.0",
+>>>>>>> b63670cc58bb88a7999f8b8bbc637d2977b5e4cc
     "class-validator": "^0.13.1",
     "cookie-parser": "^1.4.5",
     "graphql": "^15.5.1",
