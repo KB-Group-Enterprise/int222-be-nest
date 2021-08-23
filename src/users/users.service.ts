@@ -1,4 +1,4 @@
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import {
   ConflictException,
   Injectable,
@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RegisterInput } from './dto/inputs/register.input';
+import { RegisterInput } from '../auth/dto/inputs/register.input';
 import { Role } from './entities/role.entity';
 import { User } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
 import { RestoreQuestion } from './entities/restore-question.entity';
+import { ForgotPasswordInput } from 'src/auth/dto/inputs/forget-password.input';
 @Injectable()
 export class UsersService {
   constructor(
@@ -32,6 +33,11 @@ export class UsersService {
   }
 
   async createUser(newUserData: RegisterInput): Promise<User> {
+    const usernameRegex = /^[a-zA-Z]+\d*\w*/;
+    if (!usernameRegex.test(newUserData.username))
+      throw new BadRequestException(
+        'Your username must only contain character or number',
+      );
     const existUser = await this.userRepository.findOne({
       username: newUserData.username,
     });
@@ -63,6 +69,44 @@ export class UsersService {
     return await bcrypt.compare(password, user.password);
   }
   async findUserByUsername(username: string): Promise<User> {
-    return await this.userRepository.findOne({ username: username });
+    return await this.userRepository.findOne(
+      { username: username },
+      { relations: ['role', 'question'] },
+    );
+  }
+  async findUserByIdAndUpdate(
+    userId: string,
+    updateData: any,
+  ): Promise<boolean> {
+    await this.userRepository.update(userId, updateData).catch((err) => {
+      return false;
+    });
+    return true;
+  }
+  async findUserByUserId(userId: string): Promise<User> {
+    return await this.userRepository.findOne({ userId });
+  }
+
+  async getAllQuestion(): Promise<RestoreQuestion[]> {
+    return await this.questionRepository.find();
+  }
+
+  async forgotPassword(newData: ForgotPasswordInput) {
+    const user = await this.userRepository.findOne({
+      userId: newData.userId,
+    });
+    if (!user) throw new NotFoundException();
+    if (user.restoreAnswer !== newData.restoreAnswer)
+      throw new BadRequestException("Your answer doesn't match");
+    const hashNewPassword = await this.generateHashPassword(
+      newData.newPassword,
+    );
+    await this.findUserByIdAndUpdate(user.userId, {
+      password: hashNewPassword,
+    });
+  }
+
+  async deleteUserByUserId(userId: string) {
+    await this.userRepository.delete(userId);
   }
 }

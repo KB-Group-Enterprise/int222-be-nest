@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './users.entity';
 
@@ -10,7 +10,7 @@ export class RestoreQuestion {
   questionId: number;
 
   @Column()
-  @Field()
+  @Field((type) => String)
   question: string;
 
   @OneToMany((type) => User, (user) => user.question)
