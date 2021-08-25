@@ -9,6 +9,7 @@ import { CarsModule } from './cars/cars.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { VotesModule } from './votes/votes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,6 +28,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     AuthModule,
     UsersModule,
     ReviewsModule,
+    VotesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

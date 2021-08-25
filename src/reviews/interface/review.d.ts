@@ -5,13 +5,6 @@ export interface IReview {
   reviewId?: number;
   rating: number;
   comment: string;
-  reviewer: Partial<User>;
-  game: IGame;
-}
-
-export interface IVote {
-  voteId?: number;
-  vote: number;
-  review: IReview;
+  reviewer: User;
   game: IGame;
 }

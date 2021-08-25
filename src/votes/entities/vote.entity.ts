@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Game } from 'src/games/entities/game.entity';
-import { IGame } from 'src/games/interface/game';
+import { Review } from 'src/reviews/entities/review.entity';
 import { User } from 'src/users/entities/users.entity';
 import {
   Column,
@@ -9,8 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IVote } from '../interface/review';
-import { Review } from './review.entity';
+import { IVote } from '../interface/votes';
 
 @Entity({ name: 'votes' })
 @ObjectType()
@@ -21,14 +19,15 @@ export class Vote implements IVote {
 
   @Column()
   @Field(() => Int)
-  vote: number;
+  isUpvote: number;
 
   @ManyToOne((type) => Review)
   @JoinColumn({ name: 'reviewId' })
+  @Field(() => Review)
   review: Review;
 
-  @ManyToOne((type) => Game)
-  @JoinColumn({ name: 'gameId' })
-  @Field((type) => Game)
-  game: Game;
+  @ManyToOne((type) => User)
+  @JoinColumn({ name: 'userId' })
+  @Field((type) => User)
+  user: User;
 }
