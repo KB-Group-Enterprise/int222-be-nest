@@ -8,6 +8,7 @@ import { GamesModule } from './games/games.module';
 import { CarsModule } from './cars/cars.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,11 +21,13 @@ import { UsersModule } from './users/users.module';
       playground: true,
       debug: true,
       autoSchemaFile: true,
+      uploads: false,
     }),
     GamesModule,
     CarsModule,
     AuthModule,
     UsersModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
