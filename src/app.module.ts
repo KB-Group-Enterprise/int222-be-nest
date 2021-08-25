@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { VotesModule } from './votes/votes.module';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,7 @@ import { VotesModule } from './votes/votes.module';
       playground: true,
       debug: true,
       autoSchemaFile: true,
+      uploads: false,
     }),
     GamesModule,
     CarsModule,
@@ -29,6 +31,7 @@ import { VotesModule } from './votes/votes.module';
     UsersModule,
     ReviewsModule,
     VotesModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

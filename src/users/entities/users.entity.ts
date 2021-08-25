@@ -47,4 +47,7 @@ export class User {
   @Column({ name: 'refreshtoken_count', nullable: true, default: 0 })
   @Field((type) => Number, { nullable: true })
   refreshTokenCount?: number;
+
+  @Field((type) => String)
+  profileImageName: string;
 }

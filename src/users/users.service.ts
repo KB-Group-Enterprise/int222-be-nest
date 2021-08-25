@@ -13,6 +13,9 @@ import { User } from './entities/users.entity';
 import * as bcrypt from 'bcrypt';
 import { RestoreQuestion } from './entities/restore-question.entity';
 import { ForgotPasswordInput } from 'src/auth/dto/inputs/forget-password.input';
+import { UploadService } from 'src/upload/upload.service';
+import { Upload } from 'src/upload/interfaces/upload.interface';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -22,6 +25,7 @@ export class UsersService {
     private roleRepository: Repository<Role>,
     @InjectRepository(RestoreQuestion)
     private questionRepository: Repository<RestoreQuestion>,
+    private uploadService: UploadService,
   ) {}
 
   async getAllUser() {
@@ -108,5 +112,10 @@ export class UsersService {
 
   async deleteUserByUserId(userId: string) {
     await this.userRepository.delete(userId);
+  }
+  async uploadProfileImage(image: Upload): Promise<string> {
+    console.log(image);
+    await this.uploadService.saveImage(image);
+    return 'Finish';
   }
 }

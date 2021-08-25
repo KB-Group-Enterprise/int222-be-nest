@@ -8,7 +8,8 @@ import { UsersService } from './users.service';
 import { UserOutput } from './dto/outputs/user.output';
 import { RestoreQuestion } from './entities/restore-question.entity';
 import { DeleteUserInput } from './dto/inputs/delete-user.input';
-
+import { GraphQLUpload } from 'apollo-server-express';
+import { Upload } from 'src/upload/interfaces/upload.interface';
 @Resolver()
 export class UsersResolver {
   constructor(private userService: UsersService) {}
@@ -40,4 +41,13 @@ export class UsersResolver {
     await this.userService.deleteUserByUserId(deleteData.userId);
     return true;
   }
+
+  // @Mutation((returns) => String)
+  // async uploadProfileImage(
+  //   @Args({ name: 'image', type: () => GraphQLUpload }) image: Upload,
+  // ) {
+  //   console.log(image);
+  //   await this.userService.uploadProfileImage(image);
+  //   return 'success';
+  // }
 }
