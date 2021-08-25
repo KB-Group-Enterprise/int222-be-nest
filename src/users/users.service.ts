@@ -113,9 +113,9 @@ export class UsersService {
   async deleteUserByUserId(userId: string) {
     await this.userRepository.delete(userId);
   }
-  async uploadProfileImage(image: Upload): Promise<string> {
-    console.log(image);
-    await this.uploadService.saveImage(image);
-    return 'Finish';
+  async uploadProfileImage(image: Upload, { userId }: User): Promise<string> {
+    const fileName = await this.uploadService.saveImage(image, 'users');
+    await this.findUserByIdAndUpdate(userId, { profileImageName: fileName });
+    return fileName;
   }
 }
