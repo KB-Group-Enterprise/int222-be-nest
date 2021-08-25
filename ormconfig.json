@@ -3,8 +3,9 @@
   "host": "localhost",
   "port": 3306,
   "username": "root",
-  "database": "test",
-  "entities": ["dist/**/entities/*{.ts,.js}","../../dist/**/entities/*{.ts,.js}"],
+  "password": "thisispasswordformysql",
+  "database": "leview",
+  "entities": ["dist/**/entities/*{.ts,.js}"],
   "synchronize": true,
   "migrations": ["src/migrations/*{.ts,.js}"],
   "cli": {
