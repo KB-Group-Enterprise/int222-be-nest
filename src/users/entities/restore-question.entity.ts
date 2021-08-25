@@ -15,5 +15,5 @@ export class RestoreQuestion {
 
   @OneToMany((type) => User, (user) => user.question)
   @Field((type) => [User])
-  users: User[];
+  users?: User[];
 }

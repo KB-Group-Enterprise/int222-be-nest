@@ -8,6 +8,7 @@ import { GamesModule } from './games/games.module';
 import { CarsModule } from './cars/cars.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ReviewsModule } from './reviews/reviews.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,6 +26,7 @@ import { UsersModule } from './users/users.module';
     CarsModule,
     AuthModule,
     UsersModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
