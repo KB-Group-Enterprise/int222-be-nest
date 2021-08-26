@@ -12,8 +12,4 @@ export class RestoreQuestion {
   @Column()
   @Field((type) => String)
   question: string;
-
-  @OneToMany((type) => User, (user) => user.question)
-  @Field((type) => [User])
-  users: User[];
 }
