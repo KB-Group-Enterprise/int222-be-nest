@@ -11,7 +11,4 @@ export class Role {
   @Column()
   @Field()
   roleName: string;
-  @OneToMany((type) => User, (user) => user.userId)
-  @Field((type) => [User])
-  users?: User[];
 }

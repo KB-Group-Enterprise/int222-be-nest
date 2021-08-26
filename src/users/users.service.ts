@@ -114,8 +114,14 @@ export class UsersService {
     await this.userRepository.delete(userId);
   }
   async uploadProfileImage(image: Upload, { userId }: User): Promise<string> {
-    const fileName = await this.uploadService.saveImage(image, 'users');
+    const fileName = await this.uploadService.singleUpload(image, 'users');
     await this.findUserByIdAndUpdate(userId, { profileImageName: fileName });
     return fileName;
+  }
+
+  // example for test only
+  async uploadMultipleFile(images: Upload[]): Promise<string[]> {
+    const filesName = await this.uploadService.multipleUpload(images, 'users');
+    return filesName;
   }
 }

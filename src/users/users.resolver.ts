@@ -20,12 +20,12 @@ export class UsersResolver {
     private configService: ConfigService,
   ) {}
 
-  @Query((returns) => [UserOutput])
+  @Query((returns) => [User])
   @UseGuards(GqlAuthGuard)
   async users(): Promise<User[]> {
     return await this.userService.getAllUser();
   }
-  @Query((returns) => UserOutput)
+  @Query((returns) => User)
   async user(@Args() userArgs: UserArgs): Promise<User> {
     return await this.userService.findUserByUsername(userArgs.username);
   }
@@ -58,10 +58,19 @@ export class UsersResolver {
       file,
       currentUser,
     );
+    const PORT = this.configService.get('PORT');
     return {
-      url: `http://localhost:${this.configService.get(
-        'PORT',
-      )}/users/${fileName}`,
+      url: `http://localhost:${PORT}/users/${fileName}`,
     };
+  }
+
+  // Examples multiple files
+  @Mutation((returns) => [String])
+  async uploadMultiple(
+    @Args({ name: 'files', type: () => [GraphQLUpload] })
+    files: Upload[],
+  ): Promise<string[]> {
+    const filesName = await this.userService.uploadMultipleFile(files);
+    return filesName;
   }
 }
