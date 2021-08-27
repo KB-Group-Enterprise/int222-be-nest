@@ -12,7 +12,7 @@ export class UploadService {
   ): Promise<string> {
     const { ext } = parse(filename);
     const newFileName = (await this.generateRandomNameFile(10)) + ext;
-    const pathImage = this.configService.get('IMAGE_PATH') || '~/images';
+    const pathImage = this.configService.get('IMAGE_PATH') || '/images';
     const fullPath = `${pathImage}/${subfolderName}`;
     if (!existsSync(pathImage) || !existsSync(fullPath)) {
       mkdirSync(fullPath, { recursive: true });
