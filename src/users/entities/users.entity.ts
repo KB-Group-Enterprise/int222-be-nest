@@ -36,9 +36,6 @@ export class User {
   @Column({ name: 'restoreanswer', nullable: false })
   restoreAnswer: string;
 
-  @Column({ name: 'refreshtoken', nullable: true })
-  refreshToken?: string;
-
   @Column({ name: 'refreshtoken_count', nullable: true, default: 0 })
   refreshTokenCount?: number;
 
