@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
   app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
-  const pathname = process.env.IMAGE_PATH || '~/images';
+  const pathname = process.env.IMAGE_PATH || '/images';
   app.use(express.static(pathname));
   await app.listen(process.env.PORT || 3000);
 }
