@@ -78,10 +78,6 @@ export class AuthResolver {
     @Context() context: any,
   ): Promise<boolean> {
     const res = context.res as Response;
-    const isInvokeRefreshToken = await this.authService.invokeRefreshToken(
-      user.userId,
-    );
-    if (!isInvokeRefreshToken) return false;
     res.clearCookie('act');
     res.clearCookie('rft');
     return true;

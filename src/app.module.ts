@@ -11,6 +11,7 @@ import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { VotesModule } from './votes/votes.module';
 import { join } from 'path';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,6 +24,7 @@ import { join } from 'path';
       playground: true,
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      uploads: false,
     }),
     GamesModule,
     CarsModule,
@@ -30,6 +32,7 @@ import { join } from 'path';
     UsersModule,
     ReviewsModule,
     VotesModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],

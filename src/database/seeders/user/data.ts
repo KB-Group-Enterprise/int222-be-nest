@@ -21,12 +21,12 @@ export const userSeeds: User[] = [
     role: roleSeeds[0],
     restoreAnswer: 'dog',
   },
-  // {
-  //   userId: '83471aa6-f588-434e-b309-0f3fe34c4492',
-  //   username: 'admin',
-  //   password: '',
-  //   restoreanswer: 'cat',
-  //   roleRoleId: 2,
-  //   questionQuestionId: 1,
-  // },
+  {
+    userId: '83471aa6-f588-434e-b309-0f3fe34c4492',
+    username: 'admin',
+    password: '$2b$10$y23QqZ2ZnOeYbU8eyzYXJODITGxeIMnnRxKWAx0RxGzfvtVH8nIcq',
+    restoreAnswer: 'admin',
+    role: roleSeeds[1],
+    question: restoreQuestionSeeds[0],
+  },
 ];

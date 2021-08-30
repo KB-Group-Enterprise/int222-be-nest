@@ -53,9 +53,6 @@ export class AuthService {
       secret: this.configService.get('JWT_REFRESH_TOKEN'),
       expiresIn: '7d',
     });
-    await this.userService.findUserByIdAndUpdate(user.userId, {
-      refreshToken,
-    });
     return refreshToken;
   }
   async validateRefreshToken(userId: string, count: number): Promise<User> {

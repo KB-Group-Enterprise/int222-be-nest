@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
   Entity,
@@ -20,31 +20,26 @@ export class User {
   @Field((type) => String)
   username: string;
 
-  @Column()
-  @Field((type) => String)
+  @Column({ nullable: false })
   password: string;
 
-  @ManyToOne((type) => Role, (role) => role.users)
-  @JoinColumn()
+  @ManyToOne((type) => Role)
+  @JoinColumn({ name: 'roleId' })
   @Field((type) => Role)
   role: Role;
 
-  @ManyToOne(
-    (type) => RestoreQuestion,
-    (restoreQuestion) => restoreQuestion.users,
-  )
+  @ManyToOne((type) => RestoreQuestion)
+  @JoinColumn({ name: 'questionId' })
   @Field((type) => RestoreQuestion, { nullable: false })
   question: RestoreQuestion;
 
   @Column({ name: 'restoreanswer', nullable: false })
-  @Field((type) => String)
   restoreAnswer: string;
 
-  @Column({ name: 'refreshtoken', nullable: true })
-  @Field((type) => String, { nullable: true })
-  refreshToken?: string;
-
   @Column({ name: 'refreshtoken_count', nullable: true, default: 0 })
-  @Field((type) => Number, { nullable: true })
   refreshTokenCount?: number;
+
+  @Column({ name: 'profile_image_name', nullable: true })
+  @Field((type) => String, { nullable: true })
+  profileImageName?: string;
 }
