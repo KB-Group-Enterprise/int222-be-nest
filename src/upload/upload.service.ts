@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { createWriteStream, existsSync, mkdirSync, unlinkSync } from 'fs';
 import { Upload } from './interfaces/upload.interface';
 import { parse } from 'path';
+import { SUBFOLDER } from './enum/SUBFOLDER';
 @Injectable()
 export class UploadService {
   constructor(private readonly configService: ConfigService) {}
   async singleUpload(
     { createReadStream, filename }: Upload,
-    subfolderName: string,
+    subfolderName: SUBFOLDER,
   ): Promise<string> {
     const { ext } = parse(filename);
     const newFileName = (await this.generateRandomNameFile(10)) + ext;
@@ -26,7 +27,10 @@ export class UploadService {
         });
     });
   }
-  async multipleUpload(files: Upload[], subfolder: string): Promise<string[]> {
+  async multipleUpload(
+    files: Upload[],
+    subfolder: SUBFOLDER,
+  ): Promise<string[]> {
     const values = await Promise.all(files);
     const allNewFiles = values.map(async (file) => {
       const newFileName = await this.singleUpload(file, subfolder);
@@ -35,7 +39,13 @@ export class UploadService {
     const filesname = await Promise.all(allNewFiles);
     return filesname;
   }
-
+  async deleteFiles(files: string[], subfolder: SUBFOLDER) {
+    const path = this.configService.get('IMAGE_PATH') || '/images';
+    for (const fileName of files) {
+      const pathToDelete = `${path}/${subfolder}/${fileName}`;
+      unlinkSync(pathToDelete);
+    }
+  }
   generateRandomNameFile(length: number): Promise<string> {
     let result = '';
     const character =

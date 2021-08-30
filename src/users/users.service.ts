@@ -15,6 +15,7 @@ import { RestoreQuestion } from './entities/restore-question.entity';
 import { ForgotPasswordInput } from 'src/auth/dto/inputs/forget-password.input';
 import { UploadService } from 'src/upload/upload.service';
 import { Upload } from 'src/upload/interfaces/upload.interface';
+import { SUBFOLDER } from 'src/upload/enum/SUBFOLDER';
 
 @Injectable()
 export class UsersService {
@@ -114,14 +115,26 @@ export class UsersService {
     await this.userRepository.delete(userId);
   }
   async uploadProfileImage(image: Upload, { userId }: User): Promise<string> {
-    const fileName = await this.uploadService.singleUpload(image, 'users');
+    const fileName = await this.uploadService.singleUpload(
+      image,
+      SUBFOLDER.USERS,
+    );
     await this.findUserByIdAndUpdate(userId, { profileImageName: fileName });
     return fileName;
   }
 
   // example for test only
   async uploadMultipleFile(images: Upload[]): Promise<string[]> {
-    const filesName = await this.uploadService.multipleUpload(images, 'users');
+    const filesName = await this.uploadService.multipleUpload(
+      images,
+      SUBFOLDER.USERS,
+    );
     return filesName;
+  }
+  async test() {
+    this.uploadService.deleteFiles(
+      ['H7vWDsvlfV.png', 'RzCMNaj1bv.png', 'VWdH6t7AUN.png'],
+      SUBFOLDER.USERS,
+    );
   }
 }
