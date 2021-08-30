@@ -73,4 +73,10 @@ export class UsersResolver {
     const filesName = await this.userService.uploadMultipleFile(files);
     return filesName;
   }
+
+  @Mutation((returns) => String)
+  async test() {
+    this.userService.test();
+    return 'foo';
+  }
 }
