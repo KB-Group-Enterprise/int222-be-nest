@@ -7,7 +7,6 @@ import { RetailerInput } from './retailer.input';
 @InputType()
 export class NewGameInput implements IGame {
   @Field()
-  @IsAlphanumeric()
   gameName: string;
 
   @Field((type) => Float)

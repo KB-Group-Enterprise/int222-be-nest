@@ -1,0 +1,233 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Publisher {
+  publisherId: Int!
+  publisherName: String!
+}
+
+type Category {
+  categoryId: Int!
+  categoryName: String!
+}
+
+type Retailer {
+  retailerId: Int!
+  retailerName: String!
+}
+
+type Game {
+  gameId: Int!
+  gameName: String!
+  basePrice: Float!
+  description: String!
+  publisher: Publisher!
+  categories: [Category!]!
+  retailers: [Retailer!]!
+}
+
+type DeleteGameOutput {
+  gameId: Int!
+  status: String!
+}
+
+type Car {
+  id: String!
+  name: String!
+  price: Float!
+  gas: String!
+}
+
+type RestoreQuestion {
+  questionId: Float!
+  question: String!
+  users: [User!]!
+}
+
+type Role {
+  roleId: Int!
+  roleName: String!
+  users: [User!]!
+}
+
+type User {
+  userId: String!
+  username: String!
+  password: String!
+  role: Role!
+  question: RestoreQuestion!
+  restoreAnswer: String!
+  refreshToken: String
+  refreshTokenCount: Float
+}
+
+type UserOutput {
+  userId: String!
+  username: String!
+  role: Role!
+  question: RestoreQuestion!
+}
+
+type ResponseStatus {
+  status: Int!
+  message: String!
+}
+
+type Review {
+  reviewId: Int!
+  rating: Float!
+  comment: String!
+  reviewer: User!
+  game: Game!
+}
+
+type Vote {
+  voteId: Int!
+  isUpvote: Int!
+  review: Review!
+  user: User!
+}
+
+type Query {
+  cars: [Car!]!
+  car(id: String!): Car!
+  game(gameId: Int!): Game!
+  games: [Game!]!
+  users: [UserOutput!]!
+  user(username: String!): UserOutput!
+  questions: [RestoreQuestion!]!
+  reviews: [Review!]!
+  review(id: Int!): Review!
+  votes: [Vote!]!
+}
+
+type Mutation {
+  addCar(newCarData: NewCarInput!): Car!
+  updateCar(updatedCarData: UpdateCarInput!): Car!
+  deleteCar(deleteCarData: DeleteCarInput!): Car!
+  addGame(newGameData: NewGameInput!): Game!
+  updateGame(updateGameData: UpdateGameInput!): Game!
+  deleteGame(deleteGameData: DeleteGameInput!): DeleteGameOutput!
+  login(credential: CredentialInput!): String!
+  register(registerData: RegisterInput!): String!
+  refreshToken: Boolean!
+  me: UserOutput!
+  logout: Boolean!
+  forgotPassword(newData: ForgotPasswordInput!): String!
+  createUser(createUserData: RegisterInput!): User!
+  deleteUser(deleteData: DeleteUserInput!): Boolean!
+  createReview(createReviewInput: CreateReviewInput!): Review!
+  updateReview(updateReviewInput: UpdateReviewInput!): Review!
+  deleteReview(id: Int!): ResponseStatus!
+  createVote(createVoteInput: CreateVoteInput!): Vote!
+  updateVote(updateVoteInput: UpdateVoteInput!): Vote!
+  deleteVote(id: Int!): ResponseStatus!
+}
+
+input NewCarInput {
+  name: String!
+  price: Int!
+  gas: String
+}
+
+input UpdateCarInput {
+  id: String!
+  name: String!
+  price: Float!
+  gas: String!
+}
+
+input DeleteCarInput {
+  id: String!
+}
+
+input NewGameInput {
+  gameName: String!
+  basePrice: Float!
+  description: String!
+  publisher: PublisherInput!
+  categories: [CategoryInput!]!
+  retailers: [RetailerInput!]!
+}
+
+input PublisherInput {
+  publisherId: Int!
+  publisherName: String!
+}
+
+input CategoryInput {
+  categoryId: Int!
+  categoryName: String!
+}
+
+input RetailerInput {
+  retailerId: Int!
+  retailerName: String!
+}
+
+input UpdateGameInput {
+  gameId: Int!
+  gameName: String!
+  basePrice: Float!
+  description: String!
+  publisher: PublisherInput!
+  categories: [CategoryInput!]!
+  retailers: [RetailerInput!]!
+}
+
+input DeleteGameInput {
+  gameId: Int!
+}
+
+input CredentialInput {
+  username: String!
+  password: String!
+}
+
+input RegisterInput {
+  username: String!
+  password: String!
+  confirmPassword: String!
+  questionId: Float!
+  restoreAnswer: String!
+}
+
+input ForgotPasswordInput {
+  username: String!
+  userId: String!
+  restoreAnswer: String!
+  newPassword: String!
+}
+
+input DeleteUserInput {
+  userId: String!
+}
+
+input CreateReviewInput {
+  rating: Int!
+  comment: String!
+  userId: String!
+  gameId: Float!
+}
+
+input UpdateReviewInput {
+  rating: Int
+  comment: String
+  userId: String
+  gameId: Float
+  reviewId: Int!
+}
+
+input CreateVoteInput {
+  reviewId: Int!
+  userId: String!
+  isUpvote: Int!
+}
+
+input UpdateVoteInput {
+  reviewId: Int
+  userId: String
+  isUpvote: Int
+  voteId: Int!
+}

@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { VotesModule } from './votes/votes.module';
+import { join } from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,7 +22,7 @@ import { VotesModule } from './votes/votes.module';
       context: ({ req, res }) => ({ req, res }),
       playground: true,
       debug: true,
-      autoSchemaFile: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     GamesModule,
     CarsModule,
