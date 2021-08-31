@@ -119,6 +119,13 @@ export class UsersService {
       image,
       SUBFOLDER.USERS,
     );
+    const user = await this.userRepository.findOne(userId);
+    if (user.profileImageName) {
+      await this.uploadService.deleteFiles(
+        [user.profileImageName],
+        SUBFOLDER.USERS,
+      );
+    }
     await this.findUserByIdAndUpdate(userId, { profileImageName: fileName });
     return fileName;
   }

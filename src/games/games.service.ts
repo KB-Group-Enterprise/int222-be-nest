@@ -64,9 +64,9 @@ export class GamesService {
       uploads,
       SUBFOLDER.GAMES,
     );
-    console.log(imageNames);
     imageNames.forEach(async (name) => {
-      this.gameImageRepository.create({ game, name });
+      const gameImage = this.gameImageRepository.create({ game, name });
+      await this.gameImageRepository.save(gameImage);
     });
     return this.getGame({ gameId: game.gameId });
   }
