@@ -7,10 +7,12 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IGame } from '../interface/game';
 import { Category } from './category.entity';
+import { GameImage } from './gameImage.entity';
 import { Retailer } from './retailer.entity';
 
 @Entity({ name: 'games' })
@@ -48,4 +50,8 @@ export class Game implements IGame {
   @JoinTable({ name: 'games_retailers' })
   @Field((type) => [Retailer])
   retailers: Retailer[];
+
+  @OneToMany(() => GameImage, (gameImage) => gameImage.game)
+  @Field((type) => [GameImage])
+  images: GameImage[];
 }

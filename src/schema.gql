@@ -7,9 +7,8 @@ type Publisher {
   publisherName: String!
 }
 
-type Category {
-  categoryId: Int!
-  categoryName: String!
+type GameImage {
+  name: String!
 }
 
 type Retailer {
@@ -25,6 +24,12 @@ type Game {
   publisher: Publisher!
   categories: [Category!]!
   retailers: [Retailer!]!
+  images: [GameImage!]!
+}
+
+type Category {
+  categoryId: Int!
+  categoryName: String!
 }
 
 type DeleteGameOutput {
@@ -42,24 +47,23 @@ type Car {
 type RestoreQuestion {
   questionId: Float!
   question: String!
-  users: [User!]!
 }
 
 type Role {
   roleId: Int!
   roleName: String!
-  users: [User!]!
 }
 
 type User {
   userId: String!
   username: String!
-  password: String!
   role: Role!
   question: RestoreQuestion!
-  restoreAnswer: String!
-  refreshToken: String
-  refreshTokenCount: Float
+  profileImageName: String
+}
+
+type ImageOutPut {
+  url: String!
 }
 
 type UserOutput {
@@ -94,8 +98,8 @@ type Query {
   car(id: String!): Car!
   game(gameId: Int!): Game!
   games: [Game!]!
-  users: [UserOutput!]!
-  user(username: String!): UserOutput!
+  users: [User!]!
+  user(username: String!): User!
   questions: [RestoreQuestion!]!
   reviews: [Review!]!
   review(id: Int!): Review!
@@ -107,6 +111,8 @@ type Mutation {
   updateCar(updatedCarData: UpdateCarInput!): Car!
   deleteCar(deleteCarData: DeleteCarInput!): Car!
   addGame(newGameData: NewGameInput!): Game!
+  addGameWithImages(files: Upload!, newGameData: NewGameInput!): Game!
+  updateGameWithImages(files: [Upload!]!, newGameData: UpdateGameInput!): Game!
   updateGame(updateGameData: UpdateGameInput!): Game!
   deleteGame(deleteGameData: DeleteGameInput!): DeleteGameOutput!
   login(credential: CredentialInput!): String!
@@ -117,6 +123,9 @@ type Mutation {
   forgotPassword(newData: ForgotPasswordInput!): String!
   createUser(createUserData: RegisterInput!): User!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
+  uploadProfileImage(file: Upload!): ImageOutPut!
+  uploadMultiple(files: [Upload!]!): [String!]!
+  test: String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   deleteReview(id: Int!): ResponseStatus!
@@ -166,14 +175,17 @@ input RetailerInput {
   retailerName: String!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input UpdateGameInput {
+  gameName: String
+  basePrice: Float
+  description: String
+  publisher: PublisherInput
+  categories: [CategoryInput!]
+  retailers: [RetailerInput!]
   gameId: Int!
-  gameName: String!
-  basePrice: Float!
-  description: String!
-  publisher: PublisherInput!
-  categories: [CategoryInput!]!
-  retailers: [RetailerInput!]!
 }
 
 input DeleteGameInput {

@@ -1,4 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GraphQLUpload } from 'graphql-upload';
+import { Upload } from 'src/upload/interfaces/upload.interface';
 import { GetGameArgs } from './dto/args/get-game.args';
 import { DeleteGameInput } from './dto/inputs/delete-game.input';
 import { NewGameInput } from './dto/inputs/new-game.input';
@@ -28,6 +30,26 @@ export class GamesResolver {
     return this.gameService.addNewGame(newGameData).catch((err) => {
       throw err;
     });
+  }
+
+  @Mutation(() => Game)
+  public async addGameWithImages(
+    @Args('newGameData') newGameData: NewGameInput,
+    @Args({ name: 'files', type: () => GraphQLUpload }) files: Upload[],
+  ) {
+    return this.gameService
+      .saveGameWithUploads(newGameData, files)
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Mutation(() => Game)
+  public async updateGameWithImages(
+    @Args('newGameData') updateGameData: UpdateGameInput,
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: Upload[],
+  ) {
+    return this.gameService.saveGameWithUploads(updateGameData, files);
   }
 
   @Mutation(() => Game)

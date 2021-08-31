@@ -1,30 +1,12 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, Float, InputType, Int, PartialType } from '@nestjs/graphql';
 import { IsAlphanumeric } from 'class-validator';
 import { IGame } from 'src/games/interface/game';
 import { CategoryInput } from './category.input';
+import { NewGameInput } from './new-game.input';
 import { PublisherInput } from './publisher.input';
 import { RetailerInput } from './retailer.input';
 @InputType()
-export class UpdateGameInput implements IGame {
+export class UpdateGameInput extends PartialType(NewGameInput) {
   @Field((type) => Int)
   gameId: number;
-
-  @Field()
-  @IsAlphanumeric()
-  gameName: string;
-
-  @Field((type) => Float)
-  basePrice: number;
-
-  @Field()
-  description: string;
-
-  @Field((type) => PublisherInput)
-  publisher: PublisherInput;
-
-  @Field((type) => [CategoryInput])
-  categories: CategoryInput[];
-
-  @Field((type) => [RetailerInput])
-  retailers: RetailerInput[];
 }
