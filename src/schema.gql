@@ -98,9 +98,9 @@ type Query {
   car(id: String!): Car!
   game(gameId: Int!): Game!
   games: [Game!]!
-  users: [User!]!
   user(username: String!): User!
   questions: [RestoreQuestion!]!
+  users: [User!]!
   reviews: [Review!]!
   review(id: Int!): Review!
   votes: [Vote!]!
@@ -121,7 +121,6 @@ type Mutation {
   me: UserOutput!
   logout: Boolean!
   forgotPassword(newData: ForgotPasswordInput!): String!
-  createUser(createUserData: RegisterInput!): User!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
   uploadProfileImage(file: Upload!): ImageOutPut!
   uploadMultiple(files: [Upload!]!): [String!]!
