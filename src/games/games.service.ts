@@ -66,7 +66,11 @@ export class GamesService {
     );
     console.log(imageNames);
     imageNames.forEach(async (name) => {
-      this.gameImageRepository.create({ game, name });
+      const oldImages = await this.gameImageRepository.find({ game });
+      if (oldImages.length > 0) {
+        await this.gameImageRepository.delete({ game });
+      }
+      await this.gameImageRepository.insert({ game, name });
     });
     return this.getGame({ gameId: game.gameId });
   }
