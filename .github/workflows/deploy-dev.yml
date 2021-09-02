@@ -17,4 +17,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/KB-Group-Enterprise/int222-be-nest:dev
+          tags: ghcr.io/kb-group-enterprise/int222-be-nest:dev
