@@ -1,0 +1,19 @@
+name: deploy-non-prd
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  runs-on: ubuntu-20.04
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/KB-Group-Enterprise/int222-be-nest:dev
