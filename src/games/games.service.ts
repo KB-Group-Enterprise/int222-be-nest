@@ -64,7 +64,6 @@ export class GamesService {
       uploads,
       SUBFOLDER.GAMES,
     );
-    console.log(imageNames);
     imageNames.forEach(async (name) => {
       const oldImages = await this.gameImageRepository.find({ game });
       if (oldImages.length > 0) {
