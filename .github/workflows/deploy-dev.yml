@@ -51,4 +51,5 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHASE }}
           script: |
             cd ~/nest
+            docker pull ghcr.io/kb-group-enterprise/int222-be-nest:dev
             docker-compose up
