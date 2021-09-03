@@ -1,0 +1,10 @@
+services:
+    backend:
+        build: .
+        image: ghcr.io/kb-group-enterprise/int222-be-nest:dev
+        volumes:
+            - ~/nest/images:/images
+networks:
+    default:
+        external:
+            name: int222-dev
