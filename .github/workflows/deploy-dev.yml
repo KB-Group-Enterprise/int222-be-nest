@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHASE }}
-          source: docker-compose.yaml
+          source: docker-compose.yml
           target: ~/nest/
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
