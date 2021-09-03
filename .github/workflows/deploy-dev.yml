@@ -49,4 +49,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHASE }}
-          script: ls
+          script: |
+            cd ~/nest
+            docker-compose up
