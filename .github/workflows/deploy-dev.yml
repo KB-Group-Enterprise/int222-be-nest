@@ -23,6 +23,7 @@ jobs:
           host: ${{ secrets.SSH_HOSTNAME }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHASE }}
           source: docker-compose.yaml
           target: ~/nest/
       - name: Login to GitHub Container Registry
@@ -45,5 +46,6 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOSTNAME }}
           username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}        
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHASE }}
           script: ls
