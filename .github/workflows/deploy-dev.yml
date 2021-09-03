@@ -6,7 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
-    environment: dev
     steps:
       - name: Checkout Dev
         uses: actions/checkout@v2
@@ -14,7 +13,7 @@ jobs:
           ref: dev
       - name: Create .env file
         run: |
-          echo PORT=${{ secrets.ENV_DEV_PORT] }} >> .env
+          echo PORT=${{ secrets.ENV_DEV_PORT }} >> .env
           echo JWT_ACCESS_TOKEN=${{ secrets.ENV_DEV_JWT_ACCESS }} >> .env
           echo JWT_REFRESH_TOKEN=${{ secrets.ENV_DEV_JWT_REFRESH }} >> .env
           echo IMAGE_PATH=${{ secrets.ENV_DEV_IMG_PATH }} >> .env
