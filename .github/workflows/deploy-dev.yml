@@ -16,7 +16,7 @@ jobs:
           echo PORT=${{ secrets.ENV_DEV_PORT }} >> .env
           echo JWT_ACCESS_TOKEN=${{ secrets.ENV_DEV_JWT_ACCESS }} >> .env
           echo JWT_REFRESH_TOKEN=${{ secrets.ENV_DEV_JWT_REFRESH }} >> .env
-          echo IMAGE_PATH=${{ secrets.ENV_DEV_IMG_PATH }} >> .env
+          echo IMAGE_PATH=${{ secrets.ENV_DEV_IMAGE_PATH }} >> .env
       - name: Send docker-compose to host
         uses: appleboy/scp-action@master
         with:
@@ -51,5 +51,6 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHASE }}
           script: |
             cd ~/nest
+            docker-compose down
             docker pull ghcr.io/kb-group-enterprise/int222-be-nest:dev
-            docker-compose up
+            docker-compose up -d
