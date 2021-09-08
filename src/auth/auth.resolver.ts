@@ -1,10 +1,9 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { Response } from 'express';
-import { UserOutput } from 'src/users/dto/outputs/user.output';
 import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
-import { CurrentUser } from './current-user';
+import { CurrentUserGql } from './current-user-gql';
 import { CredentialInput } from './dto/inputs/credential.input';
 import { ForgotPasswordInput } from './dto/inputs/forget-password.input';
 import { RegisterInput } from './dto/inputs/register.input';
@@ -66,15 +65,15 @@ export class AuthResolver {
     return true;
   }
   @UseGuards(GqlAuthGuard)
-  @Mutation((returns) => UserOutput)
-  async me(@CurrentUser() user: User): Promise<User> {
+  @Mutation((returns) => User)
+  async me(@CurrentUserGql() user: User): Promise<User> {
     return user;
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation((returns) => Boolean)
   async logout(
-    @CurrentUser() user: User,
+    @CurrentUserGql() user: User,
     @Context() context: any,
   ): Promise<boolean> {
     const res = context.res as Response;

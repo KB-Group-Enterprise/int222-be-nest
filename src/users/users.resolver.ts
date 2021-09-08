@@ -10,7 +10,7 @@ import { Upload } from 'src/upload/interfaces/upload.interface';
 import { GraphQLUpload } from 'graphql-upload';
 import { ConfigService } from '@nestjs/config';
 import { ImageOutPut } from './dto/outputs/image.output';
-import { CurrentUser } from 'src/auth/current-user';
+import { CurrentUserGql } from 'src/auth/current-user-gql';
 import { RolesGuard } from 'src/authorization/roles.guard';
 import { ROLES } from 'src/authorization/ROLES';
 import { Roles } from 'src/authorization/roles.decorator';
@@ -48,7 +48,7 @@ export class UsersResolver {
   @Roles('roles', ROLES.REVIEWER)
   async uploadProfileImage(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: Upload,
-    @CurrentUser() currentUser: User,
+    @CurrentUserGql() currentUser: User,
   ) {
     const fileName = await this.userService.uploadProfileImage(
       file,

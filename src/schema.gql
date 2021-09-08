@@ -66,13 +66,6 @@ type ImageOutPut {
   url: String!
 }
 
-type UserOutput {
-  userId: String!
-  username: String!
-  role: Role!
-  question: RestoreQuestion!
-}
-
 type ResponseStatus {
   status: Int!
   message: String!
@@ -118,7 +111,7 @@ type Mutation {
   login(credential: CredentialInput!): String!
   register(registerData: RegisterInput!): String!
   refreshToken: Boolean!
-  me: UserOutput!
+  me: User!
   logout: Boolean!
   forgotPassword(newData: ForgotPasswordInput!): String!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
