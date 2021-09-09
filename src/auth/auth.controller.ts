@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
@@ -10,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { IUser } from 'src/users/dto/outputs/user.output';
 import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user';
@@ -18,8 +16,6 @@ import { CredentialInput } from './dto/inputs/credential.input';
 import { ForgotPasswordInput } from './dto/inputs/forget-password.input';
 import { RegisterInput } from './dto/inputs/register.input';
 import { JwtAuthGuard } from './guards/jwt-guard';
-import { LocalAuthGuard } from './guards/local-guard';
-import { RefreshAuthGuard } from './guards/refresh-guard';
 
 const accessTokenOption = {
   httpOnly: true,
@@ -27,7 +23,7 @@ const accessTokenOption = {
 };
 const refreshTokenOption = {
   httpOnly: true,
-  maxAge: 1000 * 60 * 60 * 24 * 7,
+  maxAge: 1000 * 60 * 60 * 24 * 30,
 };
 
 @Controller('auth')
@@ -80,12 +76,15 @@ export class AuthController {
     @CurrentUser()
     { userId, username, question, role, profileImageName }: User,
   ) {
-    return {
+    const user = {
       userId,
       username,
       question,
       role,
       profileImageName,
+    };
+    return {
+      data: user,
     };
   }
   @Post('/logout')
