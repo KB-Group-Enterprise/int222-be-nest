@@ -15,12 +15,13 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     super({
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_REFRESH_TOKEN'),
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: Request) => {
-          const refresh_token = req?.cookies['rft'];
-          if (refresh_token) return refresh_token;
-        },
-      ]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      // jwtFromRequest: ExtractJwt.fromExtractors([
+      //   (req: Request) => {
+      //     const refresh_token = req?.cookies['rft'];
+      //     if (refresh_token) return refresh_token;
+      //   },
+      // ]),
     });
   }
   async validate(payload: { count: number; sub: string }): Promise<User> {

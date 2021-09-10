@@ -30,17 +30,8 @@ const refreshTokenOption = {
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('/register')
-  public async register(
-    @Res({ passthrough: true }) res: Response,
-    @Body() registerInput: RegisterInput,
-  ) {
-    const user = await this.authService.register(registerInput);
-    const access_token = await this.authService.generateToken(user);
-    const refresh_token = await this.authService.generateRefreshToken(
-      user.userId,
-    );
-    res.cookie('act', access_token, accessTokenOption);
-    res.cookie('rft', refresh_token, refreshTokenOption);
+  public async register(@Body() registerInput: RegisterInput) {
+    await this.authService.register(registerInput);
     return 'Register Complete';
   }
   @Post('/login')
@@ -53,21 +44,20 @@ export class AuthController {
     const refresh_token = await this.authService.generateRefreshToken(
       user.userId,
     );
-    res.cookie('act', access_token, accessTokenOption);
-    res.cookie('rft', refresh_token, refreshTokenOption);
-    return 'Login success';
+    return {
+      token: access_token,
+      refresh_token: refresh_token,
+    };
   }
   @Post('/refresh_token')
   @UseGuards(AuthGuard('refresh'))
-  public async refreshToken(
-    @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<boolean> {
+  public async refreshToken(@Req() req: Request) {
     const user = req.user as User;
     if (!user) return false;
     const access_token = await this.authService.generateToken(user);
-    res.cookie('act', access_token, accessTokenOption);
-    return true;
+    return {
+      token: access_token,
+    };
   }
 
   @Get('/me')
@@ -97,5 +87,13 @@ export class AuthController {
   async forgotPassword(@Body() newData: ForgotPasswordInput): Promise<string> {
     await this.authService.changePassword(newData);
     return 'Reset Password success';
+  }
+
+  @Get('/secret')
+  @UseGuards(JwtAuthGuard)
+  async secret(@Req() req: Request) {
+    return {
+      secret: 'thisissecretdata',
+    };
   }
 }
