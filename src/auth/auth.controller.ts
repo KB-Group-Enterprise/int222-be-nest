@@ -52,8 +52,7 @@ export class AuthController {
   }
   @Post('/refresh_token')
   @UseGuards(AuthGuard('refresh'))
-  public async refreshToken(@Req() req: Request) {
-    const user = req.user as User;
+  public async refreshToken(@CurrentUser() user: User) {
     if (!user) return false;
     const access_token = await this.authService.generateToken(user);
     return {
@@ -65,7 +64,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   public async me(@CurrentUser() user: User) {
     const response = new UserResponse(user);
-    return response;
+    return {
+      data: response,
+    };
   }
   @Post('/logout')
   async logout(@Res({ passthrough: true }) res: Response): Promise<boolean> {
