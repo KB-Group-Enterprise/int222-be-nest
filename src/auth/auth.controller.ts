@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
+import { UserResponse } from 'src/users/dto/outputs/UserResponse';
 import { User } from 'src/users/entities/users.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user';
@@ -62,20 +63,9 @@ export class AuthController {
 
   @Get('/me')
   @UseGuards(JwtAuthGuard)
-  public async me(
-    @CurrentUser()
-    { userId, username, question, role, profileImageName }: User,
-  ) {
-    const user = {
-      userId,
-      username,
-      question,
-      role,
-      profileImageName,
-    };
-    return {
-      data: user,
-    };
+  public async me(@CurrentUser() user: User) {
+    const response = new UserResponse(user);
+    return response;
   }
   @Post('/logout')
   async logout(@Res({ passthrough: true }) res: Response): Promise<boolean> {
