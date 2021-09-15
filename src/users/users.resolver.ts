@@ -15,7 +15,6 @@ import { RolesGuard } from 'src/authorization/roles.guard';
 import { ROLES } from 'src/authorization/ROLES';
 import { Roles } from 'src/authorization/roles.decorator';
 import { RestoreQuestionOutput } from './dto/outputs/restore_question';
-import { GetQuestionInput } from './dto/inputs/get-question.input';
 @Resolver()
 export class UsersResolver {
   constructor(
