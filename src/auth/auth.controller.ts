@@ -79,12 +79,4 @@ export class AuthController {
     await this.authService.changePassword(newData);
     return 'Reset Password success';
   }
-
-  @Get('/secret')
-  @UseGuards(JwtAuthGuard)
-  async secret(@Req() req: Request) {
-    return {
-      secret: 'thisissecretdata',
-    };
-  }
 }

@@ -14,6 +14,8 @@ import { CurrentUserGql } from 'src/auth/current-user-gql';
 import { RolesGuard } from 'src/authorization/roles.guard';
 import { ROLES } from 'src/authorization/ROLES';
 import { Roles } from 'src/authorization/roles.decorator';
+import { RestoreQuestionOutput } from './dto/outputs/restore_question';
+import { GetQuestionInput } from './dto/inputs/get-question.input';
 @Resolver()
 export class UsersResolver {
   constructor(
@@ -31,6 +33,8 @@ export class UsersResolver {
     return question;
   }
   @Mutation((returns) => Boolean)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   async deleteUser(@Args('deleteData') deleteData: DeleteUserInput) {
     await this.userService.deleteUserByUserId(deleteData.userId);
     return true;
@@ -58,6 +62,15 @@ export class UsersResolver {
     return {
       url: `http://localhost:${PORT}/users/${fileName}`,
     };
+  }
+  @Mutation((returns) => RestoreQuestionOutput)
+  async getRestoreQuestion(
+    @Args('username') targetUsername: string,
+  ): Promise<RestoreQuestionOutput> {
+    const questionAndUsername = await this.userService.getQuestionByUsername(
+      targetUsername,
+    );
+    return questionAndUsername;
   }
 
   // Examples multiple files

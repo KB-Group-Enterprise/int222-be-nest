@@ -66,6 +66,11 @@ type ImageOutPut {
   url: String!
 }
 
+type RestoreQuestionOutput {
+  username: String!
+  question: RestoreQuestion!
+}
+
 type ResponseStatus {
   status: Int!
   message: String!
@@ -116,6 +121,7 @@ type Mutation {
   forgotPassword(newData: ForgotPasswordInput!): String!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
   uploadProfileImage(file: Upload!): ImageOutPut!
+  getRestoreQuestion(username: String!): RestoreQuestionOutput!
   uploadMultiple(files: [Upload!]!): [String!]!
   test: String!
   createReview(createReviewInput: CreateReviewInput!): Review!
