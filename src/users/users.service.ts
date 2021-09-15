@@ -47,7 +47,7 @@ export class UsersService {
       );
       if (!user) throw new NotFoundException('User Not found');
       return {
-        username: user.username,
+        userId: user.userId,
         question: user.question,
       };
     } catch (err) {

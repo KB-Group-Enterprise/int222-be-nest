@@ -67,7 +67,7 @@ type ImageOutPut {
 }
 
 type RestoreQuestionOutput {
-  username: String!
+  userId: String!
   question: RestoreQuestion!
 }
 
