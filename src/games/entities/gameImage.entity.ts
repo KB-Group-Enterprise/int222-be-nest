@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { type } from 'os';
 import {
   Column,
   Entity,
@@ -19,7 +20,8 @@ export class GameImage {
 
   @ManyToOne((type) => Game, {
     onDelete: 'SET NULL',
+    eager: false,
   })
-  @JoinColumn({ name: 'gameId' })
+  @JoinColumn({ name: 'game_id' })
   game: Game;
 }

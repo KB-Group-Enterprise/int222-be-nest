@@ -98,6 +98,9 @@ type Query {
   car(id: String!): Car!
   game(gameId: Int!): Game!
   games: [Game!]!
+  categories: [Category!]!
+  publishers: [Publisher!]!
+  retailers: [Retailer!]!
   user(username: String!): User!
   questions: [RestoreQuestion!]!
   users: [User!]!
