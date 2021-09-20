@@ -7,6 +7,7 @@ import { LocalStrategy } from './strategies/local-auth.strategy';
 import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import { AuthResolver } from './auth.resolver';
 import { RefreshStrategy } from './strategies/refresh-auth.strategy';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [UsersModule, PassportModule, JwtModule.register({})],
@@ -17,5 +18,6 @@ import { RefreshStrategy } from './strategies/refresh-auth.strategy';
     AuthResolver,
     RefreshStrategy,
   ],
+  controllers: [AuthController],
 })
 export class AuthModule {}

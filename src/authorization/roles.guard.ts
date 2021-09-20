@@ -17,7 +17,6 @@ export class RolesGuard implements CanActivate {
     if (!roles) return true;
     if (!user) return false;
     const userRole = user.role.roleName;
-    console.log(user);
     if (userRole === ROLES.ADMIN) return true;
     const hasRole = () => roles.includes(userRole);
     return user && userRole && hasRole();

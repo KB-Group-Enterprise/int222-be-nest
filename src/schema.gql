@@ -66,10 +66,8 @@ type ImageOutPut {
   url: String!
 }
 
-type UserOutput {
+type RestoreQuestionOutput {
   userId: String!
-  username: String!
-  role: Role!
   question: RestoreQuestion!
 }
 
@@ -121,11 +119,12 @@ type Mutation {
   login(credential: CredentialInput!): String!
   register(registerData: RegisterInput!): String!
   refreshToken: Boolean!
-  me: UserOutput!
+  me: User!
   logout: Boolean!
   forgotPassword(newData: ForgotPasswordInput!): String!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
   uploadProfileImage(file: Upload!): ImageOutPut!
+  getRestoreQuestion(username: String!): RestoreQuestionOutput!
   uploadMultiple(files: [Upload!]!): [String!]!
   test: String!
   createReview(createReviewInput: CreateReviewInput!): Review!

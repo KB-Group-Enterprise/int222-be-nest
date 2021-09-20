@@ -16,6 +16,7 @@ import { ForgotPasswordInput } from 'src/auth/dto/inputs/forget-password.input';
 import { UploadService } from 'src/upload/upload.service';
 import { Upload } from 'src/upload/interfaces/upload.interface';
 import { SUBFOLDER } from 'src/upload/enum/SUBFOLDER';
+import { RestoreQuestionOutput } from './dto/outputs/restore_question';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +37,23 @@ export class UsersService {
         throw new NotFoundException();
       });
   }
-
+  async getQuestionByUsername(
+    username: string,
+  ): Promise<RestoreQuestionOutput> {
+    try {
+      const user = await this.userRepository.findOne(
+        { username },
+        { relations: ['question'] },
+      );
+      if (!user) throw new NotFoundException('User Not found');
+      return {
+        userId: user.userId,
+        question: user.question,
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
   async createUser(newUserData: RegisterInput): Promise<User> {
     const usernameRegex = /^[a-zA-Z]+\d*\w*/;
     if (!usernameRegex.test(newUserData.username))
@@ -110,7 +127,6 @@ export class UsersService {
       password: hashNewPassword,
     });
   }
-
   async deleteUserByUserId(userId: string) {
     await this.userRepository.delete(userId);
   }

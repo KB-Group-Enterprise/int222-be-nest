@@ -10,10 +10,11 @@ import { Upload } from 'src/upload/interfaces/upload.interface';
 import { GraphQLUpload } from 'graphql-upload';
 import { ConfigService } from '@nestjs/config';
 import { ImageOutPut } from './dto/outputs/image.output';
-import { CurrentUser } from 'src/auth/current-user';
+import { CurrentUserGql } from 'src/auth/current-user-gql';
 import { RolesGuard } from 'src/authorization/roles.guard';
 import { ROLES } from 'src/authorization/ROLES';
 import { Roles } from 'src/authorization/roles.decorator';
+import { RestoreQuestionOutput } from './dto/outputs/restore_question';
 @Resolver()
 export class UsersResolver {
   constructor(
@@ -31,6 +32,8 @@ export class UsersResolver {
     return question;
   }
   @Mutation((returns) => Boolean)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   async deleteUser(@Args('deleteData') deleteData: DeleteUserInput) {
     await this.userService.deleteUserByUserId(deleteData.userId);
     return true;
@@ -48,7 +51,7 @@ export class UsersResolver {
   @Roles('roles', ROLES.REVIEWER)
   async uploadProfileImage(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: Upload,
-    @CurrentUser() currentUser: User,
+    @CurrentUserGql() currentUser: User,
   ) {
     const fileName = await this.userService.uploadProfileImage(
       file,
@@ -58,6 +61,15 @@ export class UsersResolver {
     return {
       url: `http://localhost:${PORT}/users/${fileName}`,
     };
+  }
+  @Mutation((returns) => RestoreQuestionOutput)
+  async getRestoreQuestion(
+    @Args('username') targetUsername: string,
+  ): Promise<RestoreQuestionOutput> {
+    const questionAndUsername = await this.userService.getQuestionByUsername(
+      targetUsername,
+    );
+    return questionAndUsername;
   }
 
   // Examples multiple files

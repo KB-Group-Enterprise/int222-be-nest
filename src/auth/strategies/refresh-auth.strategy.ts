@@ -17,8 +17,7 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       secretOrKey: configService.get('JWT_REFRESH_TOKEN'),
       jwtFromRequest: ExtractJwt.fromExtractors([
         (req: Request) => {
-          const refresh_token = req?.cookies['rft'];
-          if (refresh_token) return refresh_token;
+          return req.body.refresh_token;
         },
       ]),
     });
