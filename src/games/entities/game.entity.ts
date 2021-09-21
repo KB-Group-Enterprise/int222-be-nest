@@ -18,19 +18,19 @@ import { Retailer } from './retailer.entity';
 @Entity({ name: 'games' })
 @ObjectType()
 export class Game implements IGame {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'game_id'})
   @Field(() => Int)
   gameId: number;
 
-  @Column()
+  @Column({ name: 'game_name' })
   @Field()
   gameName: string;
 
-  @Column()
+  @Column({ name: 'base_price' })
   @Field(() => Float)
   basePrice: number;
 
-  @Column()
+  @Column({ name: 'description' })
   @Field()
   description: string;
 
@@ -38,7 +38,7 @@ export class Game implements IGame {
     onDelete: 'SET NULL',
     eager: true,
   })
-  @JoinColumn({ name: 'publisherId' })
+  @JoinColumn({ name: 'publisher_id' })
   @Field((type) => Publisher)
   publisher: Publisher;
 

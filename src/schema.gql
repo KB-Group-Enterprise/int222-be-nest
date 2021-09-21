@@ -37,13 +37,6 @@ type DeleteGameOutput {
   status: String!
 }
 
-type Car {
-  id: String!
-  name: String!
-  price: Float!
-  gas: String!
-}
-
 type RestoreQuestion {
   questionId: Float!
   question: String!
@@ -92,8 +85,6 @@ type Vote {
 }
 
 type Query {
-  cars: [Car!]!
-  car(id: String!): Car!
   game(gameId: Int!): Game!
   games: [Game!]!
   categories: [Category!]!
@@ -109,9 +100,6 @@ type Query {
 }
 
 type Mutation {
-  addCar(newCarData: NewCarInput!): Car!
-  updateCar(updatedCarData: UpdateCarInput!): Car!
-  deleteCar(deleteCarData: DeleteCarInput!): Car!
   addGame(newGameData: NewGameInput!): Game!
   addGameWithImages(files: Upload!, newGameData: NewGameInput!): Game!
   updateGameWithImages(files: [Upload!]!, newGameData: UpdateGameInput!): Game!
@@ -134,23 +122,6 @@ type Mutation {
   createVote(createVoteInput: CreateVoteInput!): Vote!
   updateVote(updateVoteInput: UpdateVoteInput!): Vote!
   deleteVote(id: Int!): ResponseStatus!
-}
-
-input NewCarInput {
-  name: String!
-  price: Int!
-  gas: String
-}
-
-input UpdateCarInput {
-  id: String!
-  name: String!
-  price: Float!
-  gas: String!
-}
-
-input DeleteCarInput {
-  id: String!
 }
 
 input NewGameInput {

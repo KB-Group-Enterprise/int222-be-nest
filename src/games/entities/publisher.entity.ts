@@ -6,11 +6,11 @@ import { IPublisher } from '../interface/game';
 @Entity({ name: 'publishers' })
 @ObjectType()
 export class Publisher implements IPublisher {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'publisher_id' })
   @Field(() => Int)
   publisherId: number;
 
-  @Column()
+  @Column({ name: 'publisher_name' })
   @Field()
   publisherName: string;
 }

@@ -13,21 +13,21 @@ import { IVote } from '../interface/votes';
 @Entity({ name: 'votes' })
 @ObjectType()
 export class Vote implements IVote {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'vote_id' })
   @Field(() => Int)
   voteId: number;
 
-  @Column()
+  @Column({ name: 'is_upvote' })
   @Field(() => Int)
   isUpvote: number;
 
   @ManyToOne((type) => Review)
-  @JoinColumn({ name: 'reviewId' })
+  @JoinColumn({ name: 'review_id' })
   @Field(() => Review)
   review: Review;
 
   @ManyToOne((type) => User)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   @Field((type) => User)
   user: User;
 }

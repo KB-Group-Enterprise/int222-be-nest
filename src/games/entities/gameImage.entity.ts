@@ -1,5 +1,4 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { type } from 'os';
 import {
   Column,
   Entity,
@@ -12,9 +11,9 @@ import { Game } from './game.entity';
 @Entity({ name: 'game_images' })
 @ObjectType()
 export class GameImage {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'image_id' })
   id: number;
-  @Column()
+  @Column({ name: 'image_name' })
   @Field()
   name: string;
 

@@ -13,25 +13,25 @@ import { IReview } from '../interface/review';
 @Entity({ name: 'reviews' })
 @ObjectType()
 export class Review implements IReview {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'review_id' })
   @Field((type) => Int)
   reviewId: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', name: 'rating' })
   @Field((type) => Float)
   rating: number;
 
-  @Column()
+  @Column({ name: 'comment' })
   @Field()
   comment: string;
 
   @ManyToOne((type) => User, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'reviewerId' })
+  @JoinColumn({ name: 'reviewer_id' })
   @Field((type) => User)
   reviewer: User;
 
   @ManyToOne((type) => Game, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'gameId' })
+  @JoinColumn({ name: 'game_id' })
   @Field((type) => Game)
   game: Game;
 }

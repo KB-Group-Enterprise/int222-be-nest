@@ -6,11 +6,11 @@ import { Game } from './game.entity';
 @Entity({ name: 'categories' })
 @ObjectType()
 export class Category implements ICategory {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'category_id'})
   @Field(() => Int)
   categoryId: number;
 
-  @Column()
+  @Column({ name: 'category_name' })
   @Field()
   categoryName: string;
 

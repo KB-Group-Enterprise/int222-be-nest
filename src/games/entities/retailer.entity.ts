@@ -6,11 +6,11 @@ import { Game } from './game.entity';
 @Entity({ name: 'retailers' })
 @ObjectType()
 export class Retailer implements IRetailer {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({ name: 'retailer_id' })
   @Field((type) => Int)
   retailerId: number;
 
-  @Column()
+  @Column({ name: 'retailer_name' })
   @Field()
   retailerName: string;
 
