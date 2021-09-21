@@ -55,7 +55,13 @@ export class ReviewsService {
   }
 
   public async findbyGameId(gameId: number) {
-    return await this.reviewRepository.find({ game: { gameId } });
+    const reviews = await this.reviewRepository.find({
+      relations: ['game', 'reviewer'],
+      where: {
+        game: { gameId },
+      },
+    });
+    return reviews;
   }
 
   public async update(updateReviewInput: UpdateReviewInput) {

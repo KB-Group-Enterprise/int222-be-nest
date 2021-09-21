@@ -26,7 +26,7 @@ export class ReviewsResolver {
     return this.reviewsService.findOne(id);
   }
 
-  @Query(() => [Review], { name: 'review' })
+  @Query(() => [Review], { name: 'reviewByGameId' })
   findByGameId(@Args('id', { type: () => Int }) id: number) {
     return this.reviewsService.findbyGameId(id);
   }
