@@ -6,6 +6,7 @@ export interface IGame {
   publisher: Publisher;
   categories: Category[];
   retailers: Retailer[];
+  images?: GameImage[];
 }
 
 export interface IPublisher {

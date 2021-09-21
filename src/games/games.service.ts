@@ -65,11 +65,21 @@ export class GamesService {
       SUBFOLDER.GAMES,
     );
     imageNames.forEach(async (name) => {
-      const oldImages = await this.gameImageRepository.find({ game });
+      const oldImages = await this.gameImageRepository.find({
+        game: { gameId: game.gameId },
+      });
+      console.log(oldImages);
       if (oldImages.length > 0) {
-        await this.gameImageRepository.delete({ game });
+        const oldImagesName = oldImages.map((imgObj) => imgObj.name);
+        this.uploadService.deleteFiles(oldImagesName, SUBFOLDER.GAMES);
+        oldImages.forEach((imgObj) => {
+          this.gameImageRepository.delete(imgObj.id);
+        });
       }
-      await this.gameImageRepository.insert({ game, name });
+      await this.gameImageRepository.insert({
+        game: { gameId: game.gameId },
+        name,
+      });
     });
     return this.getGame({ gameId: game.gameId });
   }
