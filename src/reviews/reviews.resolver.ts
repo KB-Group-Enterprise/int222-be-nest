@@ -26,6 +26,11 @@ export class ReviewsResolver {
     return this.reviewsService.findOne(id);
   }
 
+  @Query(() => [Review], { name: 'review' })
+  findByGameId(@Args('id', { type: () => Int }) id: number) {
+    return this.reviewsService.findbyGameId(id);
+  }
+
   @Mutation(() => Review)
   updateReview(
     @Args('updateReviewInput') updateReviewInput: UpdateReviewInput,

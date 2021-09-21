@@ -54,6 +54,10 @@ export class ReviewsService {
       });
   }
 
+  public async findbyGameId(gameId: number) {
+    return await this.reviewRepository.find({ game: { gameId } });
+  }
+
   public async update(updateReviewInput: UpdateReviewInput) {
     const oldReviewData: Review = await this.reviewRepository
       .findOneOrFail({
