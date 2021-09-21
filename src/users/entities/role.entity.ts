@@ -2,13 +2,13 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './users.entity';
 
-@Entity({ name: 'role' })
+@Entity({ name: 'roles' })
 @ObjectType()
 export class Role {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn('increment', { name: 'role_id' })
   @Field((type) => Int)
   roleId: number;
-  @Column()
+  @Column({ name: 'role_name' })
   @Field()
   roleName: string;
 }

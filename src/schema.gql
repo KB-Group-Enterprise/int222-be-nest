@@ -103,7 +103,8 @@ type Query {
   questions: [RestoreQuestion!]!
   users: [User!]!
   reviews: [Review!]!
-  review(id: Int!): [Review!]!
+  review(id: Int!): Review!
+  reviewByGameId(id: Int!): [Review!]!
   votes: [Vote!]!
 }
 
