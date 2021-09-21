@@ -8,6 +8,7 @@ import { Category } from 'src/games/entities/category.entity';
 import { User } from 'src/users/entities/users.entity';
 import { RestoreQuestion } from 'src/users/entities/restore-question.entity';
 import { Role } from 'src/users/entities/role.entity';
+import { GameImage } from 'src/games/entities/gameImage.entity';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -21,6 +22,7 @@ import { Role } from 'src/users/entities/role.entity';
             User,
             Role,
             RestoreQuestion,
+            GameImage,
           ],
         }),
     }),
