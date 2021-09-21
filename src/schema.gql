@@ -115,7 +115,7 @@ type Mutation {
   addGameWithImages(files: Upload!, newGameData: NewGameInput!): Game!
   updateGameWithImages(files: [Upload!]!, newGameData: UpdateGameInput!): Game!
   updateGame(updateGameData: UpdateGameInput!): Game!
-  deleteGame(deleteGameData: DeleteGameInput!): DeleteGameOutput!
+  deleteGame(gameId: Int!): DeleteGameOutput!
   login(credential: CredentialInput!): String!
   register(registerData: RegisterInput!): String!
   refreshToken: Boolean!
@@ -186,10 +186,6 @@ input UpdateGameInput {
   publisher: PublisherInput
   categories: [CategoryInput!]
   retailers: [RetailerInput!]
-  gameId: Int!
-}
-
-input DeleteGameInput {
   gameId: Int!
 }
 

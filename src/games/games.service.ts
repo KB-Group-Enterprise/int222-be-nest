@@ -10,7 +10,6 @@ import { Upload } from 'src/upload/interfaces/upload.interface';
 import { UploadService } from 'src/upload/upload.service';
 import { Repository } from 'typeorm';
 import { GetGameArgs } from './dto/args/get-game.args';
-import { DeleteGameInput } from './dto/inputs/delete-game.input';
 import { NewGameInput } from './dto/inputs/new-game.input';
 import { UpdateGameInput } from './dto/inputs/update-game.input';
 import { DeleteGameOutput } from './dto/outputs/delete-game.output';
@@ -84,18 +83,14 @@ export class GamesService {
     return this.getGame({ gameId: game.gameId });
   }
 
-  public async deleteGame(
-    deleteGameData: DeleteGameInput,
-  ): Promise<DeleteGameOutput> {
-    await this.gameRepository.findOneOrFail(deleteGameData.gameId).catch(() => {
+  public async deleteGame(gameId: number): Promise<DeleteGameOutput> {
+    await this.gameRepository.findOneOrFail(gameId).catch(() => {
       throw new NotFoundException();
     });
-    await this.gameRepository
-      .delete({ gameId: deleteGameData.gameId })
-      .catch((err) => {
-        throw new InternalServerErrorException();
-      });
-    return { gameId: deleteGameData.gameId, status: 'success' };
+    await this.gameRepository.delete(gameId).catch((err) => {
+      throw new InternalServerErrorException();
+    });
+    return { gameId, status: 'success' };
   }
 
   public async updateGame(updateGameData: UpdateGameInput): Promise<Game> {

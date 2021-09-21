@@ -1,8 +1,8 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLUpload } from 'graphql-upload';
 import { Upload } from 'src/upload/interfaces/upload.interface';
+import { DeleteGameArgs } from './dto/args/delete-game.args';
 import { GetGameArgs } from './dto/args/get-game.args';
-import { DeleteGameInput } from './dto/inputs/delete-game.input';
 import { NewGameInput } from './dto/inputs/new-game.input';
 import { UpdateGameInput } from './dto/inputs/update-game.input';
 import { DeleteGameOutput } from './dto/outputs/delete-game.output';
@@ -61,8 +61,8 @@ export class GamesResolver {
 
   @Mutation(() => DeleteGameOutput)
   public async deleteGame(
-    @Args('deleteGameData') deleteGameData: DeleteGameInput,
+    @Args() deleteGameArgs: DeleteGameArgs,
   ): Promise<DeleteGameOutput> {
-    return this.gameService.deleteGame(deleteGameData);
+    return this.gameService.deleteGame(deleteGameArgs.gameId);
   }
 }

@@ -36,17 +36,22 @@ export class Game implements IGame {
 
   @ManyToOne((type) => Publisher, {
     onDelete: 'SET NULL',
+    eager: true,
   })
   @JoinColumn({ name: 'publisherId' })
   @Field((type) => Publisher)
   publisher: Publisher;
 
-  @ManyToMany(() => Category, (category) => category.categoryId)
+  @ManyToMany(() => Category, (category) => category.categoryId, {
+    eager: true,
+  })
   @JoinTable({ name: 'games_categories' })
   @Field((type) => [Category])
   categories: Category[];
 
-  @ManyToMany(() => Retailer, (retailer) => retailer.retailerId)
+  @ManyToMany(() => Retailer, (retailer) => retailer.retailerId, {
+    eager: true,
+  })
   @JoinTable({ name: 'games_retailers' })
   @Field((type) => [Retailer])
   retailers: Retailer[];
