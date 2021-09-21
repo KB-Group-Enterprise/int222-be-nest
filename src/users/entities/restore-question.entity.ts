@@ -5,7 +5,7 @@ import { User } from './users.entity';
 @Entity({ name: 'restore_question' })
 @ObjectType()
 export class RestoreQuestion {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn('increment', { name: 'question_id' })
   @Field()
   questionId: number;
 

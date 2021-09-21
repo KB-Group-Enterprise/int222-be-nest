@@ -5,10 +5,10 @@ import { User } from './users.entity';
 @Entity({ name: 'role' })
 @ObjectType()
 export class Role {
-  @PrimaryGeneratedColumn('increment')
+  @PrimaryGeneratedColumn('increment', { name: 'role_id' })
   @Field((type) => Int)
   roleId: number;
-  @Column()
+  @Column({ name: 'role_name' })
   @Field()
   roleName: string;
 }
