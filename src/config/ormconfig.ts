@@ -1,8 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as typeormNamingStrategies from 'typeorm-naming-strategies/index';
-dotenv.config({
-  path: `.env`,
-});
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config({ path: './env.dev' });
 module.exports = {
   type: 'mysql',
   host: process.env.DB_HOST,

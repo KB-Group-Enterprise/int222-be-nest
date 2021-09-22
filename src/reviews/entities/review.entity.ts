@@ -1,11 +1,13 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Game } from 'src/games/entities/game.entity';
 import { User } from 'src/users/entities/users.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IReview } from '../interface/review';
@@ -34,4 +36,8 @@ export class Review implements IReview {
   @JoinColumn({ name: 'game_id' })
   @Field((type) => Game)
   game: Game;
+
+  @OneToMany((type) => Vote, (vote) => vote.review, { eager: true })
+  @Field((type) => [Vote])
+  votes: Vote[];
 }

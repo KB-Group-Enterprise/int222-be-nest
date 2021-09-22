@@ -47,5 +47,6 @@ export const gameSeeds: IGame[] = [
     publisher: publisherSeeds[0],
     retailers: [retailerSeeds[0]],
     images: [],
+    reviews: [],
   },
 ];

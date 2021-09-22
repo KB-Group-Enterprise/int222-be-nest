@@ -12,6 +12,8 @@ import { RestoreQuestion } from 'src/users/entities/restore-question.entity';
 import { Role } from 'src/users/entities/role.entity';
 import { GameImage } from 'src/games/entities/gameImage.entity';
 import * as dotenv from 'dotenv';
+import { Review } from 'src/reviews/entities/review.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 dotenv.config({
   path: `.env`,
 });
@@ -33,6 +35,8 @@ dotenv.config({
         Role,
         RestoreQuestion,
         GameImage,
+        Review,
+        Vote,
       ],
       synchronize: false,
       dropSchema: false,

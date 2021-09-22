@@ -7,36 +7,6 @@ type Publisher {
   publisherName: String!
 }
 
-type GameImage {
-  name: String!
-}
-
-type Retailer {
-  retailerId: Int!
-  retailerName: String!
-}
-
-type Game {
-  gameId: Int!
-  gameName: String!
-  basePrice: Float!
-  description: String!
-  publisher: Publisher!
-  categories: [Category!]!
-  retailers: [Retailer!]!
-  images: [GameImage!]!
-}
-
-type Category {
-  categoryId: Int!
-  categoryName: String!
-}
-
-type DeleteGameOutput {
-  gameId: Int!
-  status: String!
-}
-
 type RestoreQuestion {
   questionId: Float!
   question: String!
@@ -55,6 +25,54 @@ type User {
   profileImageName: String
 }
 
+type Vote {
+  voteId: Int!
+  isUpvote: Int!
+  review: Review!
+  user: User!
+}
+
+type Review {
+  reviewId: Int!
+  rating: Float!
+  comment: String!
+  reviewer: User!
+  game: Game!
+  votes: [Vote!]!
+}
+
+type GameImage {
+  name: String!
+}
+
+type Retailer {
+  retailerId: Int!
+  retailerName: String!
+}
+
+type Game {
+  gameId: Int!
+  gameName: String!
+  basePrice: Float!
+  description: String!
+  publisher: Publisher!
+  categories: [Category!]!
+  retailers: [Retailer!]!
+  images: [GameImage!]!
+  ratings: Int!
+  reviews: [Review!]!
+}
+
+type Category {
+  categoryId: Int!
+  categoryName: String!
+}
+
+type DeleteGameOutput {
+  gameId: Int!
+  status: String!
+}
+
 type ImageOutPut {
   url: String!
 }
@@ -69,23 +87,9 @@ type ResponseStatus {
   message: String!
 }
 
-type Review {
-  reviewId: Int!
-  rating: Float!
-  comment: String!
-  reviewer: User!
-  game: Game!
-}
-
-type Vote {
-  voteId: Int!
-  isUpvote: Int!
-  review: Review!
-  user: User!
-}
-
 type Query {
   game(gameId: Int!): Game!
+  gameWithReviews(gameId: Int!): Game!
   games: [Game!]!
   categories: [Category!]!
   publishers: [Publisher!]!

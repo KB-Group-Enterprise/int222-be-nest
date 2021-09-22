@@ -18,6 +18,11 @@ export class GamesResolver {
     return this.gameService.getGame(gameArgs);
   }
 
+  @Query(() => Game)
+  public async gameWithReviews(@Args() gameArgs: GetGameArgs): Promise<Game> {
+    return this.gameService.getGame(gameArgs, ['reviews']);
+  }
+
   @Query(() => [Game])
   public async games(): Promise<Game[]> {
     return this.gameService.getAllGames().catch((err) => {

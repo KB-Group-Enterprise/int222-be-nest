@@ -37,10 +37,20 @@ export class GamesService {
     }
   }
 
-  public async getGame(gameArgs: GetGameArgs): Promise<Game> {
+  public async getGame(
+    gameArgs: GetGameArgs,
+    relations?: string[],
+  ): Promise<Game> {
+    if (!relations) relations = [];
     return await this.gameRepository
       .findOneOrFail(gameArgs.gameId, {
-        relations: ['publisher', 'categories', 'retailers', 'images'],
+        relations: [
+          'publisher',
+          'categories',
+          'retailers',
+          'images',
+          ...relations,
+        ],
       })
       .catch((err) => {
         throw new NotFoundException();

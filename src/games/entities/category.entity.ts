@@ -6,7 +6,7 @@ import { Game } from './game.entity';
 @Entity({ name: 'categories' })
 @ObjectType()
 export class Category implements ICategory {
-  @PrimaryGeneratedColumn({ name: 'category_id'})
+  @PrimaryGeneratedColumn({ name: 'category_id' })
   @Field(() => Int)
   categoryId: number;
 
@@ -14,6 +14,6 @@ export class Category implements ICategory {
   @Field()
   categoryName: string;
 
-  @ManyToMany(() => Game, (game) => game.gameId)
+  @ManyToMany(() => Game, (game) => game.categories)
   games: Game[];
 }

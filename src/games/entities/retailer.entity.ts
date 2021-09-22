@@ -14,6 +14,6 @@ export class Retailer implements IRetailer {
   @Field()
   retailerName: string;
 
-  @ManyToMany(() => Game, (game) => game.gameId)
+  @ManyToMany(() => Game, (game) => game.retailers)
   games: Game[];
 }

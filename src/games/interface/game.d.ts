@@ -1,3 +1,5 @@
+import { Review } from "src/reviews/entities/review.entity";
+
 export interface IGame {
   gameId?: number;
   gameName: string;
@@ -6,7 +8,9 @@ export interface IGame {
   publisher: Publisher;
   categories: Category[];
   retailers: Retailer[];
+  rating?: number;
   images?: GameImage[];
+  reviews?: Review[];
 }
 
 export interface IPublisher {
