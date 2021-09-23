@@ -77,7 +77,7 @@ export class Game implements IGame {
   images: GameImage[];
 
   @Column('int', { name: 'rating', nullable: true })
-  @Field((type) => Int)
+  @Field((type) => Int, { nullable: true })
   rating: number;
 
   @OneToMany(() => Review, (review) => review.game)
