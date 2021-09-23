@@ -59,7 +59,7 @@ type Game {
   categories: [Category!]!
   retailers: [Retailer!]!
   images: [GameImage!]!
-  ratings: Int!
+  rating: Int!
   reviews: [Review!]!
 }
 

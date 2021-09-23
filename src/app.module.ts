@@ -33,6 +33,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       debug: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       uploads: false,
+      path: 'api/graphql',
     }),
     GamesModule,
     AuthModule,
