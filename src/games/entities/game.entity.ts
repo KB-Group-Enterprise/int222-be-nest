@@ -78,7 +78,7 @@ export class Game implements IGame {
 
   @Column('int', { name: 'rating', nullable: true })
   @Field((type) => Int)
-  ratings: number;
+  rating: number;
 
   @OneToMany(() => Review, (review) => review.game)
   @Field((type) => [Review])

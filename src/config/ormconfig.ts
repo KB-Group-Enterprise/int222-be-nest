@@ -1,7 +1,5 @@
-import * as dotenv from 'dotenv';
 import * as typeormNamingStrategies from 'typeorm-naming-strategies/index';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config({ path: './env.dev' });
+
 module.exports = {
   type: 'mysql',
   host: process.env.DB_HOST,
@@ -11,7 +9,7 @@ module.exports = {
   database: process.env.DB_NAME,
   namingStrategy: new typeormNamingStrategies.SnakeNamingStrategy(),
   entities: ['dist/**/entities/*{.ts,.js}'],
-  migrations: ['src/migrations/*{.ts,.js}'],
+  migrations: [process.env.TYPEORM_MIGRATION || 'src/migrations/*{.ts,.js}'],
   seeds: ['src/database/seeds/**/*{.ts,.js}'],
   factories: ['src/database/factories/**/*{.ts,.js}'],
   synchronize: false,
