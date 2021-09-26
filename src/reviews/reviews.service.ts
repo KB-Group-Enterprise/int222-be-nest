@@ -30,10 +30,28 @@ export class ReviewsService {
           createReviewInput.userId,
         ),
       };
+      this.calculateReview(newReview.game.gameId);
       return await this.reviewRepository.save(newReview);
     } catch {
       throw new InternalServerErrorException();
     }
+  }
+
+  public async calculateReview(gameId: number) {
+    const game = await this.gameRepository.findOneOrFail(gameId).catch(() => {
+      throw new NotFoundException('No game found during rating calculation.');
+    });
+    const reviews: Review[] = await this.reviewRepository.find({
+      game,
+    });
+    if (reviews.length < 1) return;
+    const ratings = reviews.map((review) => review.rating);
+    let total = 0;
+    ratings.forEach((rating) => {
+      total += rating;
+    });
+    game.rating = total;
+    return this.gameRepository.update(game.gameId, game);
   }
 
   public async findAll() {
@@ -78,6 +96,7 @@ export class ReviewsService {
         rating: updateReviewInput.rating,
       };
       Object.assign(oldReviewData, newReview);
+      this.calculateReview(newReview.game.gameId);
       return this.reviewRepository.save(oldReviewData);
     } catch (error) {
       throw new InternalServerErrorException();
