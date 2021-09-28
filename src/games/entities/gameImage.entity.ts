@@ -17,10 +17,7 @@ export class GameImage {
   @Field()
   name: string;
 
-  @ManyToOne((type) => Game, {
-    onDelete: 'SET NULL',
-    eager: false,
-  })
+  @ManyToOne((type) => Game, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'game_id' })
   game: Game;
 }

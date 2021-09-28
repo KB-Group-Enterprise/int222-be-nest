@@ -23,4 +23,7 @@ export class NewGameInput implements IGame {
 
   @Field((type) => [RetailerInput])
   retailers: RetailerInput[];
+
+  @Field()
+  releaseDate: string;
 }

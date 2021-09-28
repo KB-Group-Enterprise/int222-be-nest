@@ -8,6 +8,7 @@ export interface IGame {
   publisher: Publisher;
   categories: Category[];
   retailers: Retailer[];
+  releaseDate: string;
   rating?: number;
   images?: GameImage[];
   reviews?: Review[];

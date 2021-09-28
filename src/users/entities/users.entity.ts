@@ -1,10 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { RestoreQuestion } from './restore-question.entity';
 import { Role } from './role.entity';
@@ -42,4 +44,10 @@ export class User {
   @Column({ name: 'profile_image_name', nullable: true })
   @Field((type) => String, { nullable: true })
   profileImageName?: string;
+
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'datetime' })
+  updatedAt: Date;
 }

@@ -61,6 +61,7 @@ type Game {
   images: [GameImage!]!
   rating: Int
   reviews: [Review!]!
+  releaseDate: String!
 }
 
 type Category {
@@ -105,7 +106,7 @@ type Query {
 
 type Mutation {
   addGame(newGameData: NewGameInput!): Game!
-  addGameWithImages(files: Upload!, newGameData: NewGameInput!): Game!
+  addGameWithImages(files: [Upload!]!, newGameData: NewGameInput!): Game!
   updateGameWithImages(files: [Upload!]!, newGameData: UpdateGameInput!): Game!
   updateGame(updateGameData: UpdateGameInput!): Game!
   deleteGame(gameId: Int!): DeleteGameOutput!
@@ -135,6 +136,7 @@ input NewGameInput {
   publisher: PublisherInput!
   categories: [CategoryInput!]!
   retailers: [RetailerInput!]!
+  releaseDate: String!
 }
 
 input PublisherInput {
@@ -162,6 +164,7 @@ input UpdateGameInput {
   publisher: PublisherInput
   categories: [CategoryInput!]
   retailers: [RetailerInput!]
+  releaseDate: String
   gameId: Int!
 }
 

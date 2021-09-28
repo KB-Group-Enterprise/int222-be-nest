@@ -4,6 +4,7 @@ import { Publisher } from 'src/games/entities/publisher.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -11,6 +12,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { IGame } from '../interface/game';
 import { Category } from './category.entity';
@@ -28,7 +30,12 @@ export class Game implements IGame {
   @Field()
   gameName: string;
 
-  @Column({ name: 'base_price' })
+  @Column('decimal', {
+    name: 'base_price',
+    precision: 15,
+    scale: 2,
+    default: () => "'0.00'",
+  })
   @Field(() => Float)
   basePrice: number;
 
@@ -83,4 +90,14 @@ export class Game implements IGame {
   @OneToMany(() => Review, (review) => review.game)
   @Field((type) => [Review])
   reviews: Review[];
+
+  @Column('date', { name: 'release_date' })
+  @Field()
+  releaseDate: string;
+
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'datetime' })
+  updatedAt: Date;
 }

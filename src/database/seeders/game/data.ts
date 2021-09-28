@@ -44,6 +44,7 @@ export const gameSeeds: IGame[] = [
     basePrice: 100.0,
     description: 'Game Very Good, POG.',
     categories: categorySeeds,
+    releaseDate: '2021-09-27',
     publisher: publisherSeeds[0],
     retailers: [retailerSeeds[0]],
     images: [],
