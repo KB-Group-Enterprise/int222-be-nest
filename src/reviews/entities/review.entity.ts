@@ -4,11 +4,13 @@ import { User } from 'src/users/entities/users.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { IReview } from '../interface/review';
 
@@ -40,4 +42,10 @@ export class Review implements IReview {
   @OneToMany((type) => Vote, (vote) => vote.review, { eager: true })
   @Field((type) => [Vote])
   votes: Vote[];
+
+  @CreateDateColumn({ name: 'created_at', type: 'datetime' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'datetime' })
+  updatedAt: Date;
 }

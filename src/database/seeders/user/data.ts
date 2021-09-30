@@ -12,7 +12,7 @@ export const roleSeeds: Role[] = [
   { roleId: 2, roleName: 'admin' },
 ];
 
-export const userSeeds: User[] = [
+export const userSeeds: Partial<User>[] = [
   {
     userId: 'a507456c-df78-4eea-b390-dfeaa8aa4d5f',
     username: 'foobar',

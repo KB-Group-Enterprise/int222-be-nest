@@ -64,6 +64,19 @@ export class GamesService {
     });
   }
 
+  public async deleteImagesByGame(gameId: number) {
+    const oldImages = await this.gameImageRepository.find({
+      game: { gameId: gameId },
+    });
+    if (oldImages.length > 0) {
+      const oldImagesName = oldImages.map((imgObj) => imgObj.name);
+      await this.uploadService.deleteFiles(oldImagesName, SUBFOLDER.GAMES);
+      oldImages.forEach((imgObj) => {
+        this.gameImageRepository.delete(imgObj.id);
+      });
+    }
+  }
+
   public async saveGameWithUploads(
     newGameData: NewGameInput | UpdateGameInput,
     uploads: Upload[],
@@ -73,18 +86,8 @@ export class GamesService {
       uploads,
       SUBFOLDER.GAMES,
     );
+    this.deleteImagesByGame(game.gameId);
     imageNames.forEach(async (name) => {
-      const oldImages = await this.gameImageRepository.find({
-        game: { gameId: game.gameId },
-      });
-      console.log(oldImages);
-      if (oldImages.length > 0) {
-        const oldImagesName = oldImages.map((imgObj) => imgObj.name);
-        this.uploadService.deleteFiles(oldImagesName, SUBFOLDER.GAMES);
-        oldImages.forEach((imgObj) => {
-          this.gameImageRepository.delete(imgObj.id);
-        });
-      }
       await this.gameImageRepository.insert({
         game: { gameId: game.gameId },
         name,
@@ -97,6 +100,7 @@ export class GamesService {
     await this.gameRepository.findOneOrFail(gameId).catch(() => {
       throw new NotFoundException();
     });
+    this.deleteImagesByGame(gameId);
     await this.gameRepository.delete(gameId).catch((err) => {
       throw new InternalServerErrorException();
     });

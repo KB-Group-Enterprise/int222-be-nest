@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useStaticAssets(pathname, { prefix: '/api/images' });
   app.use(cookieParser());
   app.enableCors({
-    origin: process.env.FRONTEND_ORIGIN,
+    origin: '*',
     credentials: true,
     methods: '*',
   });

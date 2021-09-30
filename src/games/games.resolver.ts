@@ -40,7 +40,7 @@ export class GamesResolver {
   @Mutation(() => Game)
   public async addGameWithImages(
     @Args('newGameData') newGameData: NewGameInput,
-    @Args({ name: 'files', type: () => GraphQLUpload }) files: Upload[],
+    @Args({ name: 'files', type: () => [GraphQLUpload] }) files: Upload[],
   ) {
     return this.gameService
       .saveGameWithUploads(newGameData, files)
