@@ -29,7 +29,6 @@ export class GamesService {
       const games = await this.gameRepository.find({
         relations: ['publisher', 'categories', 'retailers', 'images'],
       });
-      console.log(games);
       return games;
     } catch (err) {
       console.error(err);

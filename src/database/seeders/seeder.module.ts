@@ -40,6 +40,7 @@ dotenv.config({
       ],
       synchronize: false,
       dropSchema: false,
+      logging: 'all',
     }),
     GameSeederModule,
     UserSeederModule,
