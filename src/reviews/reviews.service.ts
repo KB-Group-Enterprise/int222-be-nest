@@ -96,7 +96,7 @@ export class ReviewsService {
         rating: updateReviewInput.rating,
       };
       Object.assign(oldReviewData, newReview);
-      this.calculateReview(newReview.game.gameId);
+      this.calculateReview(updateReviewInput.gameId);
       return this.reviewRepository.save(oldReviewData);
     } catch (error) {
       throw new InternalServerErrorException();
