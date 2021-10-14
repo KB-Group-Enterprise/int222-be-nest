@@ -17,6 +17,8 @@ import { UploadService } from 'src/upload/upload.service';
 import { Upload } from 'src/upload/interfaces/upload.interface';
 import { SUBFOLDER } from 'src/upload/enum/SUBFOLDER';
 import { RestoreQuestionOutput } from './dto/outputs/restore_question';
+import { UpdateRoleInput } from './dto/inputs/update-role.input';
+import { ROLES } from 'src/authorization/ROLES';
 
 @Injectable()
 export class UsersService {
@@ -75,7 +77,7 @@ export class UsersService {
       questionId: newUserData.questionId,
     });
     const reviewerRole = await this.roleRepository.findOne({
-      roleName: 'reviewer',
+      roleName: ROLES.REVIEWER,
     });
     newUser.role = reviewerRole;
     newUser.question = question;
@@ -100,9 +102,11 @@ export class UsersService {
     userId: string,
     updateData: any,
   ): Promise<boolean> {
-    await this.userRepository.update(userId, updateData).catch((err) => {
-      return false;
-    });
+    try {
+      await this.userRepository.update(userId, updateData);
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
     return true;
   }
   async findUserByUserId(userId: string): Promise<User> {
@@ -145,7 +149,19 @@ export class UsersService {
     await this.findUserByIdAndUpdate(userId, { profileImageName: fileName });
     return fileName;
   }
-
+  async updateRole(data: UpdateRoleInput) {
+    const user = await this.userRepository.findOne(data.userId, {
+      relations: ['role'],
+    });
+    if (!user) throw new NotFoundException('Not found user');
+    const role = await this.roleRepository.findOne({
+      roleName: data.role,
+    });
+    const result = await this.findUserByIdAndUpdate(user.userId, {
+      role: role,
+    });
+    return result;
+  }
   // example for test only
   async uploadMultipleFile(images: Upload[]): Promise<string[]> {
     const filesName = await this.uploadService.multipleUpload(
@@ -153,11 +169,5 @@ export class UsersService {
       SUBFOLDER.USERS,
     );
     return filesName;
-  }
-  async test() {
-    this.uploadService.deleteFiles(
-      ['H7vWDsvlfV.png', 'RzCMNaj1bv.png', 'VWdH6t7AUN.png'],
-      SUBFOLDER.USERS,
-    );
   }
 }

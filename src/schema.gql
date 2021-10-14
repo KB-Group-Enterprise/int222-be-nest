@@ -75,7 +75,7 @@ type DeleteGameOutput {
 }
 
 type ImageOutPut {
-  url: String!
+  imageName: String!
 }
 
 type RestoreQuestionOutput {
@@ -118,9 +118,8 @@ type Mutation {
   forgotPassword(newData: ForgotPasswordInput!): String!
   deleteUser(deleteData: DeleteUserInput!): Boolean!
   uploadProfileImage(file: Upload!): ImageOutPut!
+  updateRole(updateRoleData: UpdateRoleInput!): Boolean!
   getRestoreQuestion(username: String!): RestoreQuestionOutput!
-  uploadMultiple(files: [Upload!]!): [String!]!
-  test: String!
   createReview(createReviewInput: CreateReviewInput!): Review!
   updateReview(updateReviewInput: UpdateReviewInput!): Review!
   deleteReview(id: Int!): ResponseStatus!
@@ -190,6 +189,11 @@ input ForgotPasswordInput {
 
 input DeleteUserInput {
   userId: String!
+}
+
+input UpdateRoleInput {
+  userId: String!
+  role: String!
 }
 
 input CreateReviewInput {

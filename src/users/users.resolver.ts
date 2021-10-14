@@ -15,6 +15,7 @@ import { RolesGuard } from 'src/authorization/roles.guard';
 import { ROLES } from 'src/authorization/ROLES';
 import { Roles } from 'src/authorization/roles.decorator';
 import { RestoreQuestionOutput } from './dto/outputs/restore_question';
+import { UpdateRoleInput } from './dto/inputs/update-role.input';
 @Resolver()
 export class UsersResolver {
   constructor(
@@ -52,15 +53,21 @@ export class UsersResolver {
   async uploadProfileImage(
     @Args({ name: 'file', type: () => GraphQLUpload }) file: Upload,
     @CurrentUserGql() currentUser: User,
-  ) {
+  ): Promise<ImageOutPut> {
     const fileName = await this.userService.uploadProfileImage(
       file,
       currentUser,
     );
-    const PORT = this.configService.get('PORT');
     return {
-      url: `http://localhost:${PORT}/users/${fileName}`,
+      imageName: `${fileName}`,
     };
+  }
+  @Mutation((returns) => Boolean)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
+  async updateRole(@Args('updateRoleData') updateRoleData: UpdateRoleInput) {
+    const result = await this.userService.updateRole(updateRoleData);
+    return result;
   }
   @Mutation((returns) => RestoreQuestionOutput)
   async getRestoreQuestion(
@@ -73,18 +80,18 @@ export class UsersResolver {
   }
 
   // Examples multiple files
-  @Mutation((returns) => [String])
-  async uploadMultiple(
-    @Args({ name: 'files', type: () => [GraphQLUpload] })
-    files: Upload[],
-  ): Promise<string[]> {
-    const filesName = await this.userService.uploadMultipleFile(files);
-    return filesName;
-  }
+  // @Mutation((returns) => [String])
+  // async uploadMultiple(
+  //   @Args({ name: 'files', type: () => [GraphQLUpload] })
+  //   files: Upload[],
+  // ): Promise<string[]> {
+  //   const filesName = await this.userService.uploadMultipleFile(files);
+  //   return filesName;
+  // }
 
-  @Mutation((returns) => String)
-  async test() {
-    this.userService.test();
-    return 'foo';
-  }
+  // @Mutation((returns) => String)
+  // async test() {
+  //   this.userService.test();
+  //   return 'foo';
+  // }
 }
