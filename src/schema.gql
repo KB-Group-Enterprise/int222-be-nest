@@ -69,6 +69,11 @@ type Category {
   categoryName: String!
 }
 
+type DeleteOutput {
+  id: Int!
+  status: String!
+}
+
 type DeleteGameOutput {
   gameId: Int!
   status: String!
@@ -93,8 +98,20 @@ type Query {
   gameWithReviews(gameId: Int!): Game!
   games: [Game!]!
   categories: [Category!]!
+  category(categoryId: Int!): Category!
+  addCategory(addCategoryData: NewCategoryInput!): Category!
+  updateCategory(updateCategoryData: CategoryInput!): Category!
+  deleteCategory(categoryId: Int!): DeleteOutput!
   publishers: [Publisher!]!
+  publisher(publisherId: Int!): Publisher!
+  addPublisher(addPublisherData: NewPublisherInput!): Publisher!
+  updatePublisher(updatePublisherData: PublisherInput!): Publisher!
+  deletePublisher(publisherId: Int!): DeleteOutput!
   retailers: [Retailer!]!
+  retailer(retailerId: Int!): Retailer!
+  addRetailer(addRetailerData: NewRetailerInput!): Retailer!
+  updateRetailer(updateRetailerData: RetailerInput!): Retailer!
+  deleteRetailer(retailerId: Int!): DeleteOutput!
   user(username: String!): User!
   questions: [RestoreQuestion!]!
   users: [User!]!
@@ -102,6 +119,33 @@ type Query {
   review(id: Int!): Review!
   reviewByGameId(id: Int!): [Review!]!
   votes: [Vote!]!
+}
+
+input NewCategoryInput {
+  categoryName: String!
+}
+
+input CategoryInput {
+  categoryId: Int!
+  categoryName: String!
+}
+
+input NewPublisherInput {
+  publisherName: String!
+}
+
+input PublisherInput {
+  publisherId: Int!
+  publisherName: String!
+}
+
+input NewRetailerInput {
+  retailerId: Int!
+}
+
+input RetailerInput {
+  retailerId: Int!
+  retailerName: String!
 }
 
 type Mutation {
@@ -136,21 +180,6 @@ input NewGameInput {
   categories: [CategoryInput!]!
   retailers: [RetailerInput!]!
   releaseDate: String!
-}
-
-input PublisherInput {
-  publisherId: Int!
-  publisherName: String!
-}
-
-input CategoryInput {
-  categoryId: Int!
-  categoryName: String!
-}
-
-input RetailerInput {
-  retailerId: Int!
-  retailerName: String!
 }
 
 """The `Upload` scalar type represents a file upload."""
