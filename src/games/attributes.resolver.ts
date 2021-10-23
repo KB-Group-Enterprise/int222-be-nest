@@ -1,4 +1,4 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AttributeService } from './attributes.service';
 import { DeleteCategoryArgs } from './dto/args/delete-category.args';
 import { DeletePublisherArgs } from './dto/args/delete-publisher.args';
@@ -31,19 +31,19 @@ export class AttributeResolver {
     return this.attService.getCategory(getCategoryArgs);
   }
 
-  @Query(() => Category)
-  addCategory(@Args('addCategoryData') addCategoryData: NewCategoryInput) {
+  @Mutation(() => Category)
+  async addCategory(@Args('addCategoryData') addCategoryData: NewCategoryInput) {
     return this.attService.createCategory(addCategoryData);
   }
 
-  @Query(() => Category)
+  @Mutation(() => Category)
   updateCategory(
     @Args('updateCategoryData') updateCategoryData: CategoryInput,
   ) {
     return this.attService.updateCategory(updateCategoryData);
   }
 
-  @Query(() => DeleteOutput)
+  @Mutation(() => DeleteOutput)
   deleteCategory(@Args() deleteCategoryData: DeleteCategoryArgs) {
     return this.attService.deleteCategory(deleteCategoryData);
   }
@@ -58,19 +58,19 @@ export class AttributeResolver {
     return this.attService.getPublisher(getPublisherArgs);
   }
 
-  @Query(() => Publisher)
+  @Mutation(() => Publisher)
   addPublisher(@Args('addPublisherData') addPublisherData: NewPublisherInput) {
     return this.attService.createPublisher(addPublisherData);
   }
 
-  @Query(() => Publisher)
+  @Mutation(() => Publisher)
   updatePublisher(
     @Args('updatePublisherData') updatePublisherData: PublisherInput,
   ) {
     return this.attService.updatePublisher(updatePublisherData);
   }
 
-  @Query(() => DeleteOutput)
+  @Mutation(() => DeleteOutput)
   deletePublisher(@Args() deletePublisherData: DeletePublisherArgs) {
     return this.attService.deletePublisher(deletePublisherData);
   }
@@ -85,19 +85,19 @@ export class AttributeResolver {
     return this.attService.getRetailer(getRetailerArgs);
   }
 
-  @Query(() => Retailer)
+  @Mutation(() => Retailer)
   addRetailer(@Args('addRetailerData') addRetailerData: NewRetailerInput) {
     return this.attService.createRetailer(addRetailerData);
   }
 
-  @Query(() => Retailer)
+  @Mutation(() => Retailer)
   updateRetailer(
     @Args('updateRetailerData') updateRetailerData: RetailerInput,
   ) {
     return this.attService.updateRetailer(updateRetailerData);
   }
 
-  @Query(() => DeleteOutput)
+  @Mutation(() => DeleteOutput)
   deleteRetailer(@Args() deleteRetailerData: DeleteRetailerArgs) {
     return this.attService.deleteRetailer(deleteRetailerData);
   }

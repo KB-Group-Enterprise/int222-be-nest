@@ -17,6 +17,7 @@ import { NewPublisherInput } from './dto/inputs/new-publisher.input';
 import { NewRetailerInput } from './dto/inputs/new-retailer.input';
 import { PublisherInput } from './dto/inputs/publisher.input';
 import { RetailerInput } from './dto/inputs/retailer.input';
+import { DeleteOutput } from './dto/outputs/delete-output';
 import { Category } from './entities/category.entity';
 import { Publisher } from './entities/publisher.entity';
 import { Retailer } from './entities/retailer.entity';
@@ -39,9 +40,11 @@ export class AttributeService {
     });
   }
 
-  public createCategory(newCatgory: NewCategoryInput) {
-    return this.categoryRepo.insert(newCatgory).catch(() => {
-      throw new InternalServerErrorException('Canot Insert Category');
+  public async createCategory(newCatgory: NewCategoryInput) {
+    const category = await this.categoryRepo.create();
+    category.categoryName = newCatgory.categoryName;
+    return await this.categoryRepo.save(category).catch(() => {
+      throw new InternalServerErrorException('Canot Insert Category!');
     });
   }
 
@@ -50,13 +53,18 @@ export class AttributeService {
       categoryId: categoryData.categoryId,
     });
     Object.assign(category, categoryData);
-    return this.categoryRepo.update(category.categoryId, category).catch(() => {
+    return this.categoryRepo.save(category).catch(() => {
       throw new InternalServerErrorException('Cannot Update Category');
     });
   }
 
-  public async deleteCategory(args: DeleteCategoryArgs) {
-    return this.categoryRepo.delete(args.categoryId);
+  public async deleteCategory(args: DeleteCategoryArgs): Promise<DeleteOutput> {
+    try {
+      this.categoryRepo.delete(args.categoryId);
+      return { id: args.categoryId, status: 'success' };
+    } catch (e) {
+      throw new InternalServerErrorException('Cannot Delete Category');
+    }
   }
 
   public getAllPublishers() {
@@ -70,7 +78,7 @@ export class AttributeService {
   }
 
   public createPublisher(newPublisher: NewPublisherInput) {
-    return this.publisherRepo.insert(newPublisher).catch(() => {
+    return this.publisherRepo.save(newPublisher).catch(() => {
       throw new InternalServerErrorException('Canot Insert Publisher');
     });
   }
@@ -80,15 +88,18 @@ export class AttributeService {
       publisherId: publisherData.publisherId,
     });
     Object.assign(publisher, publisherData);
-    return this.publisherRepo
-      .update(publisher.publisherId, publisher)
-      .catch(() => {
-        throw new InternalServerErrorException('Cannot Update Publisher');
-      });
+    return this.publisherRepo.save(publisher).catch(() => {
+      throw new InternalServerErrorException('Cannot Update Publisher');
+    });
   }
 
   public async deletePublisher(args: DeletePublisherArgs) {
-    return this.publisherRepo.delete(args.publisherId);
+    try {
+      this.publisherRepo.delete(args.publisherId);
+      return { id: args.publisherId, status: 'success' };
+    } catch (e) {
+      throw new InternalServerErrorException('Cannot Delete Publisher');
+    }
   }
 
   public getAllRetailers() {
@@ -102,7 +113,7 @@ export class AttributeService {
   }
 
   public createRetailer(newRetailer: NewRetailerInput) {
-    return this.retailerRepo.insert(newRetailer).catch(() => {
+    return this.retailerRepo.save(newRetailer).catch(() => {
       throw new InternalServerErrorException('Canot Insert Retailer');
     });
   }
@@ -112,12 +123,17 @@ export class AttributeService {
       retailerId: retailerData.retailerId,
     });
     Object.assign(retailer, retailerData);
-    return this.retailerRepo.update(retailer.retailerId, retailer).catch(() => {
+    return this.retailerRepo.save(retailer).catch(() => {
       throw new InternalServerErrorException('Cannot Update Retailer');
     });
   }
 
   public async deleteRetailer(args: DeleteRetailerArgs) {
-    return this.retailerRepo.delete(args.retailerId);
+    try {
+      this.retailerRepo.delete(args.retailerId);
+      return { id: args.retailerId, status: 'success' };
+    } catch (e) {
+      throw new InternalServerErrorException('Cannot Delete Retailer');
+    }
   }
 }

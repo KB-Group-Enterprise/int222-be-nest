@@ -99,19 +99,10 @@ type Query {
   games: [Game!]!
   categories: [Category!]!
   category(categoryId: Int!): Category!
-  addCategory(addCategoryData: NewCategoryInput!): Category!
-  updateCategory(updateCategoryData: CategoryInput!): Category!
-  deleteCategory(categoryId: Int!): DeleteOutput!
   publishers: [Publisher!]!
   publisher(publisherId: Int!): Publisher!
-  addPublisher(addPublisherData: NewPublisherInput!): Publisher!
-  updatePublisher(updatePublisherData: PublisherInput!): Publisher!
-  deletePublisher(publisherId: Int!): DeleteOutput!
   retailers: [Retailer!]!
   retailer(retailerId: Int!): Retailer!
-  addRetailer(addRetailerData: NewRetailerInput!): Retailer!
-  updateRetailer(updateRetailerData: RetailerInput!): Retailer!
-  deleteRetailer(retailerId: Int!): DeleteOutput!
   user(username: String!): User!
   questions: [RestoreQuestion!]!
   users: [User!]!
@@ -121,39 +112,21 @@ type Query {
   votes: [Vote!]!
 }
 
-input NewCategoryInput {
-  categoryName: String!
-}
-
-input CategoryInput {
-  categoryId: Int!
-  categoryName: String!
-}
-
-input NewPublisherInput {
-  publisherName: String!
-}
-
-input PublisherInput {
-  publisherId: Int!
-  publisherName: String!
-}
-
-input NewRetailerInput {
-  retailerId: Int!
-}
-
-input RetailerInput {
-  retailerId: Int!
-  retailerName: String!
-}
-
 type Mutation {
   addGame(newGameData: NewGameInput!): Game!
   addGameWithImages(files: [Upload!]!, newGameData: NewGameInput!): Game!
   updateGameWithImages(files: [Upload!]!, newGameData: UpdateGameInput!): Game!
   updateGame(updateGameData: UpdateGameInput!): Game!
   deleteGame(gameId: Int!): DeleteGameOutput!
+  addCategory(addCategoryData: NewCategoryInput!): Category!
+  updateCategory(updateCategoryData: CategoryInput!): Category!
+  deleteCategory(categoryId: Int!): DeleteOutput!
+  addPublisher(addPublisherData: NewPublisherInput!): Publisher!
+  updatePublisher(updatePublisherData: PublisherInput!): Publisher!
+  deletePublisher(publisherId: Int!): DeleteOutput!
+  addRetailer(addRetailerData: NewRetailerInput!): Retailer!
+  updateRetailer(updateRetailerData: RetailerInput!): Retailer!
+  deleteRetailer(retailerId: Int!): DeleteOutput!
   login(credential: CredentialInput!): String!
   register(registerData: RegisterInput!): String!
   refreshToken: Boolean!
@@ -182,6 +155,21 @@ input NewGameInput {
   releaseDate: String!
 }
 
+input PublisherInput {
+  publisherId: Int!
+  publisherName: String!
+}
+
+input CategoryInput {
+  categoryId: Int!
+  categoryName: String!
+}
+
+input RetailerInput {
+  retailerId: Int!
+  retailerName: String!
+}
+
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
@@ -194,6 +182,18 @@ input UpdateGameInput {
   retailers: [RetailerInput!]
   releaseDate: String
   gameId: Int!
+}
+
+input NewCategoryInput {
+  categoryName: String!
+}
+
+input NewPublisherInput {
+  publisherName: String!
+}
+
+input NewRetailerInput {
+  retailerName: String!
 }
 
 input CredentialInput {
