@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -21,8 +22,20 @@ export class VotesService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
   public async create(createVoteInput: CreateVoteInput) {
+    const isExist = await this.voteRepository.findOne(
+      {
+        review: { reviewId: createVoteInput.reviewId },
+        user: { userId: createVoteInput.userId },
+      },
+      {
+        relations: ['review', 'user'],
+      },
+    );
+    if (isExist) {
+      throw new BadRequestException('User already voted this reviews');
+    }
     try {
-      const newVote: IVote = await {
+      const newVote: IVote = {
         review: await this.reviewRepository.findOneOrFail(
           createVoteInput.reviewId,
         ),

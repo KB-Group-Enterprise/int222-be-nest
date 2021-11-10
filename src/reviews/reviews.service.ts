@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -21,8 +22,18 @@ export class ReviewsService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
   public async create(createReviewInput: CreateReviewInput) {
+    const isExist = await this.reviewRepository.findOne(
+      {
+        reviewer: { userId: createReviewInput.userId },
+        game: { gameId: createReviewInput.gameId },
+      },
+      { relations: ['reviewer', 'game'] },
+    );
+    if (isExist) {
+      throw new BadRequestException('User Already Review This Game!');
+    }
     try {
-      const newReview: IReview = await {
+      const newReview: IReview = {
         comment: createReviewInput.comment,
         rating: createReviewInput.rating,
         game: await this.gameRepository.findOneOrFail(createReviewInput.gameId),
@@ -30,7 +41,7 @@ export class ReviewsService {
           createReviewInput.userId,
         ),
       };
-      this.calculateReview(newReview.game.gameId);
+      await this.calculateReview(newReview.game.gameId);
       return await this.reviewRepository.save(newReview);
     } catch {
       throw new InternalServerErrorException();
@@ -44,14 +55,19 @@ export class ReviewsService {
     const reviews: Review[] = await this.reviewRepository.find({
       game,
     });
+    console.log(reviews);
     if (reviews.length < 1) return;
     const ratings = reviews.map((review) => review.rating);
     let total = 0;
-    ratings.forEach((rating) => {
-      total += rating;
+    ratings.forEach((rating: number) => {
+      if (!isNaN(rating) && typeof rating === 'number') total += rating;
     });
     game.rating = total;
-    return this.gameRepository.update(game.gameId, game);
+    if (total != 0 && reviews.length > 0)
+      game.rating = game.rating / reviews.length;
+    return await this.gameRepository.save(game).catch((e) => {
+      console.log('update error', e);
+    });
   }
 
   public async findAll() {
