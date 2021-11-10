@@ -66,7 +66,9 @@ export class ReviewsService {
 
   public async findOne(id: number) {
     return await this.reviewRepository
-      .findOneOrFail(id, { relations: ['game', 'reviewer'] })
+      .findOneOrFail(id, {
+        relations: ['game', 'reviewer', 'votes', 'votes.user'],
+      })
       .catch((err) => {
         throw new NotFoundException();
       });
@@ -74,7 +76,7 @@ export class ReviewsService {
 
   public async findbyGameId(gameId: number) {
     const reviews = await this.reviewRepository.find({
-      relations: ['game', 'reviewer'],
+      relations: ['game', 'reviewer', 'votes', 'votes.user'],
       where: {
         game: { gameId },
       },
