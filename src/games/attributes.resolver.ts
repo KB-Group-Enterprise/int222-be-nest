@@ -1,4 +1,9 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { GqlAuthGuard } from 'src/auth/guards/gql-guard';
+import { ROLES } from 'src/authorization/ROLES';
+import { Roles } from 'src/authorization/roles.decorator';
+import { RolesGuard } from 'src/authorization/roles.guard';
 import { AttributeService } from './attributes.service';
 import { DeleteCategoryArgs } from './dto/args/delete-category.args';
 import { DeletePublisherArgs } from './dto/args/delete-publisher.args';
@@ -32,11 +37,15 @@ export class AttributeResolver {
   }
 
   @Mutation(() => Category)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   async addCategory(@Args('addCategoryData') addCategoryData: NewCategoryInput) {
     return this.attService.createCategory(addCategoryData);
   }
 
   @Mutation(() => Category)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   updateCategory(
     @Args('updateCategoryData') updateCategoryData: CategoryInput,
   ) {
@@ -44,6 +53,8 @@ export class AttributeResolver {
   }
 
   @Mutation(() => DeleteOutput)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   deleteCategory(@Args() deleteCategoryData: DeleteCategoryArgs) {
     return this.attService.deleteCategory(deleteCategoryData);
   }
@@ -59,11 +70,15 @@ export class AttributeResolver {
   }
 
   @Mutation(() => Publisher)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   addPublisher(@Args('addPublisherData') addPublisherData: NewPublisherInput) {
     return this.attService.createPublisher(addPublisherData);
   }
 
   @Mutation(() => Publisher)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   updatePublisher(
     @Args('updatePublisherData') updatePublisherData: PublisherInput,
   ) {
@@ -71,6 +86,8 @@ export class AttributeResolver {
   }
 
   @Mutation(() => DeleteOutput)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   deletePublisher(@Args() deletePublisherData: DeletePublisherArgs) {
     return this.attService.deletePublisher(deletePublisherData);
   }
@@ -86,11 +103,15 @@ export class AttributeResolver {
   }
 
   @Mutation(() => Retailer)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   addRetailer(@Args('addRetailerData') addRetailerData: NewRetailerInput) {
     return this.attService.createRetailer(addRetailerData);
   }
 
   @Mutation(() => Retailer)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   updateRetailer(
     @Args('updateRetailerData') updateRetailerData: RetailerInput,
   ) {
@@ -98,6 +119,8 @@ export class AttributeResolver {
   }
 
   @Mutation(() => DeleteOutput)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   deleteRetailer(@Args() deleteRetailerData: DeleteRetailerArgs) {
     return this.attService.deleteRetailer(deleteRetailerData);
   }
