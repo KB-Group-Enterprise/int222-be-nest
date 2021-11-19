@@ -20,7 +20,12 @@ export class GamesResolver {
 
   @Query(() => Game)
   public async gameWithReviews(@Args() gameArgs: GetGameArgs): Promise<Game> {
-    return this.gameService.getGame(gameArgs, ['reviews', 'reviews.reviewer']);
+    return this.gameService.getGame(gameArgs, [
+      'reviews',
+      'reviews.reviewer',
+      'reviews.votes',
+      'reviews.votes.user',
+    ]);
   }
 
   @Query(() => [Game])
