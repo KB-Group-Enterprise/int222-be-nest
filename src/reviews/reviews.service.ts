@@ -73,7 +73,7 @@ export class ReviewsService {
   public async findAll() {
     return await this.reviewRepository
       .find({
-        relations: ['game', 'reviewer'],
+        relations: ['game', 'reviewer', 'votes', 'votes.user'],
       })
       .catch((err) => {
         throw new NotFoundException();
