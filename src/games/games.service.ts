@@ -56,6 +56,18 @@ export class GamesService {
       });
   }
 
+  public async findGameByName(gameName: string) {
+    try {
+      return this.gameRepository
+        .createQueryBuilder('games')
+        .where('games.game_name like :gameName', { gameName })
+        .getOne();
+    } catch (e) {
+      console.log(e);
+      throw new NotFoundException('No Game By This Name');
+    }
+  }
+
   public async addNewGame(newGameData: NewGameInput): Promise<Game> {
     const newGame = this.gameRepository.create(newGameData);
     return this.gameRepository.save(newGame).catch(() => {
