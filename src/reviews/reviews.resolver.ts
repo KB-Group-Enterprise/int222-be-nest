@@ -4,12 +4,15 @@ import { Review } from './entities/review.entity';
 import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
 import { ResponseStatus } from 'src/common/graphql/commons.class';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-guard';
 
 @Resolver(() => Review)
 export class ReviewsResolver {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Mutation(() => Review)
+  @UseGuards(GqlAuthGuard)
   createReview(
     @Args('createReviewInput') createReviewInput: CreateReviewInput,
   ) {
@@ -32,6 +35,7 @@ export class ReviewsResolver {
   }
 
   @Mutation(() => Review)
+  @UseGuards(GqlAuthGuard)
   updateReview(
     @Args('updateReviewInput') updateReviewInput: UpdateReviewInput,
   ) {
@@ -39,6 +43,7 @@ export class ReviewsResolver {
   }
 
   @Mutation(() => ResponseStatus)
+  @UseGuards(GqlAuthGuard)
   deleteReview(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<ResponseStatus> {

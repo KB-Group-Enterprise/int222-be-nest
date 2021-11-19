@@ -1,5 +1,10 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { GraphQLUpload } from 'graphql-upload';
+import { GqlAuthGuard } from 'src/auth/guards/gql-guard';
+import { ROLES } from 'src/authorization/ROLES';
+import { Roles } from 'src/authorization/roles.decorator';
+import { RolesGuard } from 'src/authorization/roles.guard';
 import { Upload } from 'src/upload/interfaces/upload.interface';
 import { DeleteGameArgs } from './dto/args/delete-game.args';
 import { GetGameArgs } from './dto/args/get-game.args';
@@ -31,6 +36,8 @@ export class GamesResolver {
   }
 
   @Mutation(() => Game)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   public async addGame(@Args('newGameData') newGameData: NewGameInput) {
     return this.gameService.addNewGame(newGameData).catch((err) => {
       throw err;
@@ -38,6 +45,8 @@ export class GamesResolver {
   }
 
   @Mutation(() => Game)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   public async addGameWithImages(
     @Args('newGameData') newGameData: NewGameInput,
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: Upload[],
@@ -50,6 +59,8 @@ export class GamesResolver {
   }
 
   @Mutation(() => Game)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   public async updateGameWithImages(
     @Args('newGameData') updateGameData: UpdateGameInput,
     @Args({ name: 'files', type: () => [GraphQLUpload] }) files: Upload[],
@@ -58,6 +69,8 @@ export class GamesResolver {
   }
 
   @Mutation(() => Game)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   public async updateGame(
     @Args('updateGameData') updateGameData: UpdateGameInput,
   ): Promise<Game> {
@@ -65,6 +78,8 @@ export class GamesResolver {
   }
 
   @Mutation(() => DeleteGameOutput)
+  @UseGuards(GqlAuthGuard, RolesGuard)
+  @Roles('roles', ROLES.ADMIN)
   public async deleteGame(
     @Args() deleteGameArgs: DeleteGameArgs,
   ): Promise<DeleteGameOutput> {
