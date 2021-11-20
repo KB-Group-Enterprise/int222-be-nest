@@ -7,10 +7,13 @@ import { Roles } from 'src/authorization/roles.decorator';
 import { RolesGuard } from 'src/authorization/roles.guard';
 import { Upload } from 'src/upload/interfaces/upload.interface';
 import { DeleteGameArgs } from './dto/args/delete-game.args';
+import { FindGameArgs } from './dto/args/find-game.args';
 import { GetGameArgs } from './dto/args/get-game.args';
+import { GamesPaginationArgs } from './dto/args/pagination.args';
 import { NewGameInput } from './dto/inputs/new-game.input';
 import { UpdateGameInput } from './dto/inputs/update-game.input';
 import { DeleteGameOutput } from './dto/outputs/delete-game.output';
+import { GamePaginationOutput } from './dto/outputs/game-pagination';
 import { Game } from './entities/game.entity';
 import { GamesService } from './games.service';
 
@@ -35,11 +38,18 @@ export class GamesResolver {
 
   @Query(() => [Game])
   public async games(): Promise<Game[]> {
-    return this.gameService.getAllGames().catch((err) => {
-      throw err;
-    });
+    return this.gameService.getAllGames();
   }
 
+  @Query(() => [Game])
+  public async searchGames(@Args() args: FindGameArgs): Promise<Game[]> {
+    return this.gameService.findGameByName(args.gameName);
+  }
+
+  @Query(() => GamePaginationOutput)
+  public async paginateGames(@Args() paginationArgs: GamesPaginationArgs) {
+    return await this.gameService.paginateTest(paginationArgs);
+  }
   @Mutation(() => Game)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles('roles', ROLES.ADMIN)

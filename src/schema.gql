@@ -79,6 +79,10 @@ type DeleteGameOutput {
   status: String!
 }
 
+type GamePaginationOutput {
+  items: [Game!]!
+}
+
 type ImageOutPut {
   imageName: String!
 }
@@ -97,6 +101,8 @@ type Query {
   game(gameId: Int!): Game!
   gameWithReviews(gameId: Int!): Game!
   games: [Game!]!
+  searchGames(gameName: String!): [Game!]!
+  paginateGames(limit: Int!, page: Int!, filterBy: String, filter: String, sortBy: String, order: String): GamePaginationOutput!
   categories: [Category!]!
   category(categoryId: Int!): Category!
   publishers: [Publisher!]!

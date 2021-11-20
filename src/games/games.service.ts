@@ -15,6 +15,12 @@ import { UpdateGameInput } from './dto/inputs/update-game.input';
 import { DeleteGameOutput } from './dto/outputs/delete-game.output';
 import { Game } from './entities/game.entity';
 import { GameImage } from './entities/gameImage.entity';
+import {
+  paginate,
+  Pagination,
+  IPaginationOptions,
+} from 'nestjs-typeorm-paginate';
+import { GamesPaginationArgs } from './dto/args/pagination.args';
 @Injectable()
 export class GamesService {
   constructor(
@@ -56,12 +62,62 @@ export class GamesService {
       });
   }
 
+  public async paginateTest({
+    limit,
+    page,
+    filterBy,
+    filter,
+    sortBy,
+    order,
+  }: GamesPaginationArgs): Promise<Pagination<Game>> {
+    const paginateOption: IPaginationOptions = {
+      limit,
+      page,
+    };
+    if (!filterBy && !sortBy) {
+      return paginate<Game>(this.gameRepository, paginateOption);
+    } else {
+      const queryBuilder = this.gameRepository
+        .createQueryBuilder('games')
+        .leftJoinAndSelect('games.publisher', 'publisher');
+      if (filterBy === 'publisher') {
+        queryBuilder.where('games.publisher = :publisherId', {
+          publisherId: filter,
+        });
+      } else if (filterBy === 'category') {
+        queryBuilder.innerJoin(
+          'games.categories',
+          'category',
+          'category.category_id = :categoryId',
+          { categoryId: filter },
+        );
+      } else if (filterBy === 'retailer') {
+        queryBuilder.innerJoin(
+          'games.retailers',
+          'retailer',
+          'retailer.retailer_id = :retailerId',
+          { retailerId: filter },
+        );
+      }
+      const result = await queryBuilder.getMany();
+      console.log(result);
+      if (sortBy) queryBuilder.orderBy(sortBy, order || 'ASC');
+      return paginate<Game>(queryBuilder, paginateOption);
+    }
+  }
+
   public async findGameByName(gameName: string) {
     try {
-      return this.gameRepository
+      console.log(gameName);
+      const result = await this.gameRepository
         .createQueryBuilder('games')
-        .where('games.game_name like :gameName', { gameName })
-        .getOne();
+        .where('LOWER(game_name) LIKE LOWER(:gameName)', {
+          gameName: `%${gameName}%`,
+        })
+        .orderBy('rating', 'DESC')
+        .getMany();
+      console.log(result);
+      return result;
     } catch (e) {
       console.log(e);
       throw new NotFoundException('No Game By This Name');
