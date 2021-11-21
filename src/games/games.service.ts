@@ -62,7 +62,7 @@ export class GamesService {
       });
   }
 
-  public async paginateTest({
+  public async paginateAndFilter({
     limit,
     page,
     filterBy,
@@ -80,23 +80,23 @@ export class GamesService {
       const queryBuilder = this.gameRepository
         .createQueryBuilder('games')
         .leftJoinAndSelect('games.publisher', 'publisher');
-      if (filterBy === 'publisher') {
+      if (filterBy.includes('publisher')) {
         queryBuilder.where('games.publisher = :publisherId', {
-          publisherId: filter,
+          publisherId: filter[filterBy.indexOf('publisher')],
         });
-      } else if (filterBy === 'category') {
+      } else if (filterBy.includes('category')) {
         queryBuilder.innerJoin(
           'games.categories',
           'category',
           'category.category_id = :categoryId',
-          { categoryId: filter },
+          { categoryId: filter[filterBy.indexOf('publisher')] },
         );
-      } else if (filterBy === 'retailer') {
+      } else if (filterBy.includes('retailer')) {
         queryBuilder.innerJoin(
           'games.retailers',
           'retailer',
           'retailer.retailer_id = :retailerId',
-          { retailerId: filter },
+          { retailerId: filter[filterBy.indexOf('retailer')] },
         );
       }
       const result = await queryBuilder.getMany();

@@ -9,10 +9,10 @@ export class GamesPaginationArgs {
   @Field(() => Int)
   @IsNumber()
   page: number;
-  @Field(() => String, { nullable: true })
-  filterBy: string;
-  @Field(() => String, { nullable: true })
-  filter: string;
+  @Field(() => [String], { nullable: true })
+  filterBy: string[];
+  @Field(() => [String], { nullable: true })
+  filter: string[];
   @Field(() => String, { nullable: true })
   sortBy: string;
   @Field(() => String, { nullable: true })

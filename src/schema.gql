@@ -102,7 +102,7 @@ type Query {
   gameWithReviews(gameId: Int!): Game!
   games: [Game!]!
   searchGames(gameName: String!): [Game!]!
-  paginateGames(limit: Int!, page: Int!, filterBy: String, filter: String, sortBy: String, order: String): GamePaginationOutput!
+  paginateGames(limit: Int!, page: Int!, filterBy: [String!], filter: [String!], sortBy: String, order: String): GamePaginationOutput!
   categories: [Category!]!
   category(categoryId: Int!): Category!
   publishers: [Publisher!]!

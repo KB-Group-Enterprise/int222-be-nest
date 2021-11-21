@@ -48,7 +48,7 @@ export class GamesResolver {
 
   @Query(() => GamePaginationOutput)
   public async paginateGames(@Args() paginationArgs: GamesPaginationArgs) {
-    return await this.gameService.paginateTest(paginationArgs);
+    return await this.gameService.paginateAndFilter(paginationArgs);
   }
   @Mutation(() => Game)
   @UseGuards(GqlAuthGuard, RolesGuard)
