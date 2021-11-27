@@ -23,10 +23,16 @@ export class Vote implements IVote {
   @Field(() => Int)
   isUpvote: number;
 
-  @ManyToOne((type) => Review)
+  @ManyToOne((type) => Review, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'review_id' })
   @Field(() => Review)
-  review: Review;
+  private _review: Review;
+  public get review(): Review {
+    return this._review;
+  }
+  public set review(value: Review) {
+    this._review = value;
+  }
 
   @ManyToOne((type) => User)
   @JoinColumn({ name: 'user_id' })
