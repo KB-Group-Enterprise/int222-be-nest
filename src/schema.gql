@@ -81,6 +81,15 @@ type DeleteGameOutput {
 
 type GamePaginationOutput {
   items: [Game!]!
+  meta: GamePaginaionMeta!
+}
+
+type GamePaginaionMeta {
+  itemCount: Int!
+  totalItems: Int
+  itemsPerPage: Int!
+  totalPages: Int
+  currentPage: Int!
 }
 
 type ImageOutPut {

@@ -79,7 +79,7 @@ export class Game implements IGame {
   @Field((type) => [Retailer])
   retailers: Retailer[];
 
-  @OneToMany(() => GameImage, (gameImage) => gameImage.game)
+  @OneToMany(() => GameImage, (gameImage) => gameImage.game, { eager: true })
   @Field((type) => [GameImage])
   images: GameImage[];
 

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -99,24 +100,34 @@ export class GamesService {
           { retailerId: filter[filterBy.indexOf('retailer')] },
         );
       }
-      const result = await queryBuilder.getMany();
-      console.log(result);
       if (sortBy) queryBuilder.orderBy(sortBy, order || 'ASC');
-      return paginate<Game>(queryBuilder, paginateOption);
+      const paginateResult = await paginate<Game>(queryBuilder, paginateOption);
+      const fullGame: Promise<Game>[] = paginateResult.items.map(
+        async (game: Game) => {
+          return await this.gameRepository.findOne(game.gameId);
+        },
+      );
+      await Promise.all(fullGame);
+      (paginateResult as any).items = fullGame;
+      console.log(paginateResult.items);
+      return paginateResult;
     }
   }
 
   public async findGameByName(gameName: string) {
     try {
-      console.log(gameName);
+      if (!gameName) return [];
       const result = await this.gameRepository
         .createQueryBuilder('games')
+        // .leftJoinAndSelect('games.publisher', 'publisher')
+        // .leftJoinAndSelect('games.categories', 'category')
+        // .leftJoinAndSelect('games.retailers', 'retailer')
+        .leftJoinAndSelect('games.images', 'image')
         .where('LOWER(game_name) LIKE LOWER(:gameName)', {
           gameName: `%${gameName}%`,
         })
         .orderBy('rating', 'DESC')
         .getMany();
-      console.log(result);
       return result;
     } catch (e) {
       console.log(e);
@@ -148,6 +159,9 @@ export class GamesService {
     newGameData: NewGameInput | UpdateGameInput,
     uploads: Upload[],
   ): Promise<Game> {
+    const existsByName = await this.findGameByName(newGameData.gameName);
+    if (existsByName.length > 0)
+      throw new BadRequestException('This game name existed');
     const game = await this.gameRepository.save(newGameData);
     const imageNames = await this.uploadService.multipleUpload(
       uploads,
