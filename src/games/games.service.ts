@@ -109,7 +109,6 @@ export class GamesService {
       );
       await Promise.all(fullGame);
       (paginateResult as any).items = fullGame;
-      console.log(paginateResult.items);
       return paginateResult;
     }
   }
@@ -159,9 +158,11 @@ export class GamesService {
     newGameData: NewGameInput | UpdateGameInput,
     uploads: Upload[],
   ): Promise<Game> {
-    const existsByName = await this.findGameByName(newGameData.gameName);
-    if (existsByName.length > 0)
-      throw new BadRequestException('This game name existed');
+    if (newGameData instanceof NewGameInput) {
+      const existsByName = await this.findGameByName(newGameData.gameName);
+      if (existsByName.length > 0)
+        throw new BadRequestException('This game name existed');
+    }
     const game = await this.gameRepository.save(newGameData);
     const imageNames = await this.uploadService.multipleUpload(
       uploads,
