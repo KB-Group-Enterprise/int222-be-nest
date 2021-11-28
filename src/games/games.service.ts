@@ -85,14 +85,16 @@ export class GamesService {
         queryBuilder.where('games.publisher = :publisherId', {
           publisherId: filter[filterBy.indexOf('publisher')],
         });
-      } else if (filterBy.includes('category')) {
+      }
+      if (filterBy.includes('category')) {
         queryBuilder.innerJoin(
           'games.categories',
           'category',
           'category.category_id = :categoryId',
-          { categoryId: filter[filterBy.indexOf('publisher')] },
+          { categoryId: filter[filterBy.indexOf('category')] },
         );
-      } else if (filterBy.includes('retailer')) {
+      }
+      if (filterBy.includes('retailer')) {
         queryBuilder.innerJoin(
           'games.retailers',
           'retailer',
