@@ -7,10 +7,13 @@ export class UserResponse {
   private username: string;
   private role: Role;
   private question: RestoreQuestion;
+  private profileImage: string;
+
   constructor(user: User) {
     this.userId = user.userId;
     this.username = user.username;
     this.role = user.role;
     this.question = user.question;
+    this.profileImage = user.profileImageName;
   }
 }
