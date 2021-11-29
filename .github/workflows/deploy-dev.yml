@@ -22,6 +22,7 @@ jobs:
           echo DB_USERNAME=${{ secrets.ENV_DEV_DB_USERNAME }} >> .env
           echo DB_PASSWORD=${{ secrets.ENV_DEV_DB_PASSWORD }} >> .env
           echo DB_NAME=${{ secrets.ENV_DEV_DB_NAME }} >> .env
+          echo BASE_URL=${{ secrets.ENV_DEV_BASE_URL }} >> .env
       - name: Send docker-compose to host
         uses: appleboy/scp-action@master
         with:
