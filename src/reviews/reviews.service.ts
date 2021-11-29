@@ -41,10 +41,13 @@ export class ReviewsService {
           createReviewInput.userId,
         ),
       };
-      await this.calculateReview(newReview.game.gameId);
-      return await this.reviewRepository.save(newReview);
-    } catch {
-      throw new InternalServerErrorException();
+      const result = await this.reviewRepository.save(newReview);
+      const calculate = await this.calculateReview(newReview.game.gameId);
+      return result;
+    } catch (e) {
+      throw new InternalServerErrorException(
+        'Failed to Save and Calculate Review',
+      );
     }
   }
 
@@ -55,16 +58,17 @@ export class ReviewsService {
     const reviews: Review[] = await this.reviewRepository.find({
       game,
     });
-    console.log(reviews);
-    if (reviews.length < 1) return;
     const ratings = reviews.map((review) => review.rating);
     let total = 0;
     ratings.forEach((rating: number) => {
-      if (!isNaN(rating) && typeof rating === 'number') total += rating;
+      if (rating) total += rating;
     });
-    game.rating = total;
-    if (total != 0 && reviews.length > 0)
-      game.rating = game.rating / reviews.length;
+    if (reviews.length > 0) {
+      const gameRating = (total / reviews.length) * 10;
+      game.rating = gameRating;
+    } else {
+      game.rating = null;
+    }
     return await this.gameRepository.save(game).catch((e) => {
       console.log('update error', e);
     });
@@ -122,9 +126,13 @@ export class ReviewsService {
   }
 
   public async remove(id: number): Promise<ResponseStatus> {
+    const review = await this.reviewRepository.findOne(id, {
+      relations: ['game'],
+    });
     await this.reviewRepository.delete({ reviewId: id }).catch((err) => {
       throw new InternalServerErrorException();
     });
+    await this.calculateReview(review.game.gameId);
     return { status: 200, message: 'success' };
   }
 }

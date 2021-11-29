@@ -28,7 +28,7 @@ type User {
 type Vote {
   voteId: Int!
   isUpvote: Int!
-  _review: Review!
+  review: Review!
   user: User!
 }
 
