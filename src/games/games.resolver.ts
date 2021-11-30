@@ -42,7 +42,7 @@ export class GamesResolver {
   }
 
   @Query(() => [Game])
-  public async pupularGames(): Promise<Game[]> {
+  public async popularGames(): Promise<Game[]> {
     return this.gameService.findPopularGames();
   }
 
