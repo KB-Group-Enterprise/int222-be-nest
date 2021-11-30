@@ -63,6 +63,8 @@ export class AuthController {
   @Get('/me')
   @UseGuards(JwtAuthGuard)
   public async me(@CurrentUser() user: User) {
+    user.profileImageName =
+      process.env.BASE_URL + '/api/images/users' + user.profileImageName;
     const response = new UserResponse(user);
     return {
       data: response,

@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { BadRequestException, UseGuards } from '@nestjs/common';
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { GqlAuthGuard } from 'src/auth/guards/gql-guard';
 import { UserArgs } from './dto/args/user.args';
@@ -65,7 +65,12 @@ export class UsersResolver {
   @Mutation((returns) => Boolean)
   @UseGuards(GqlAuthGuard, RolesGuard)
   @Roles('roles', ROLES.ADMIN)
-  async updateRole(@Args('updateRoleData') updateRoleData: UpdateRoleInput) {
+  async updateRole(
+    @Args('updateRoleData') updateRoleData: UpdateRoleInput,
+    @CurrentUserGql() user: User,
+  ) {
+    if (user.userId === updateRoleData.userId)
+      throw new BadRequestException("You can't update your role");
     const result = await this.userService.updateRole(updateRoleData);
     return result;
   }
