@@ -125,6 +125,7 @@ type Query {
   reviews: [Review!]!
   review(id: Int!): Review!
   reviewByGameId(id: Int!): [Review!]!
+  reviewByUserId(id: String!): [Review!]!
   votes: [Vote!]!
 }
 

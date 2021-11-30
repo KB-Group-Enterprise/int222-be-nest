@@ -9,6 +9,7 @@ import { ResponseStatus } from 'src/common/graphql/commons.class';
 import { Game } from 'src/games/entities/game.entity';
 import { User } from 'src/users/entities/users.entity';
 import { Repository } from 'typeorm';
+import { FindReviewByUserArgs } from './dto/args/find-review-by-user.args';
 import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
 import { Review } from './entities/review.entity';
@@ -134,5 +135,13 @@ export class ReviewsService {
     });
     await this.calculateReview(review.game.gameId);
     return { status: 200, message: 'success' };
+  }
+
+  public async findReviewsByUser(findArgs: FindReviewByUserArgs) {
+    const reviews = await this.reviewRepository.find({
+      where: { reviewer: { userId: findArgs.userId } },
+      relations: ['game'],
+    });
+    return reviews;
   }
 }
