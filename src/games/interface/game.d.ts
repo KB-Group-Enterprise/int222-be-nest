@@ -1,4 +1,4 @@
-import { Review } from "src/reviews/entities/review.entity";
+import { Review } from 'src/reviews/entities/review.entity';
 
 export interface IGame {
   gameId?: number;
@@ -27,4 +27,9 @@ export interface ICategory {
 export interface IRetailer {
   retailerId: number;
   retailerName: string;
+}
+
+export interface ReviewCount {
+  gameId: number;
+  count: number;
 }
