@@ -42,6 +42,11 @@ export class GamesResolver {
   }
 
   @Query(() => [Game])
+  public async popularGames(): Promise<Game[]> {
+    return this.gameService.findPopularGames();
+  }
+
+  @Query(() => [Game])
   public async searchGames(@Args() args: FindGameArgs): Promise<Game[]> {
     return this.gameService.findGameByName(args.gameName);
   }

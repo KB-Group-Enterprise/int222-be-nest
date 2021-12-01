@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Review } from 'src/reviews/entities/review.entity';
 import { UploadService } from 'src/upload/upload.service';
 import { AttributeResolver } from './attributes.resolver';
 import { AttributeService } from './attributes.service';
@@ -13,7 +14,14 @@ import { GamesService } from './games.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Game, GameImage, Retailer, Publisher, Category]),
+    TypeOrmModule.forFeature([
+      Game,
+      GameImage,
+      Retailer,
+      Publisher,
+      Category,
+      Review,
+    ]),
     UploadService,
   ],
   providers: [

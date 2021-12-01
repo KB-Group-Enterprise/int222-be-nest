@@ -9,19 +9,21 @@ import { DH_CHECK_P_NOT_SAFE_PRIME } from 'constants';
 import { SUBFOLDER } from 'src/upload/enum/SUBFOLDER';
 import { Upload } from 'src/upload/interfaces/upload.interface';
 import { UploadService } from 'src/upload/upload.service';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { GetGameArgs } from './dto/args/get-game.args';
 import { NewGameInput } from './dto/inputs/new-game.input';
 import { UpdateGameInput } from './dto/inputs/update-game.input';
 import { DeleteGameOutput } from './dto/outputs/delete-game.output';
 import { Game } from './entities/game.entity';
 import { GameImage } from './entities/gameImage.entity';
+import { ReviewCount } from './interface/game';
 import {
   paginate,
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
 import { GamesPaginationArgs } from './dto/args/pagination.args';
+import { Review } from 'src/reviews/entities/review.entity';
 @Injectable()
 export class GamesService {
   constructor(
@@ -29,6 +31,7 @@ export class GamesService {
     @InjectRepository(GameImage)
     private gameImageRepository: Repository<GameImage>,
     private uploadService: UploadService,
+    @InjectRepository(Review) private reviewRepository: Repository<Review>,
   ) {}
 
   public async getAllGames(): Promise<Game[]> {
@@ -201,5 +204,90 @@ export class GamesService {
       });
     await this.gameRepository.save(updateGameData);
     return await this.gameRepository.findOneOrFail(updateGameData.gameId);
+  }
+
+  public async findPopularGames() {
+    //fetch game that has rating sort by rating
+    const games = await this.gameRepository.find({
+      order: { rating: 'DESC' },
+      where: { rating: MoreThan(0) },
+    });
+    //find how many reviews each games has
+    const gameIds = games.map((game) => game.gameId);
+    const reviewCounts = await this.countReviews(gameIds);
+    const maxNReview = Math.max(...reviewCounts.map((item) => item.count));
+    //find global average
+    const globalRating = await this.findGlobalAverageRating();
+    let gameWithBayesian: { game: Game; bayesianRate: number }[] = games.map(
+      (game) => {
+        const nReview = reviewCounts.find(
+          (reviewCount) => reviewCount.gameId === game.gameId,
+        ).count;
+        if (nReview < 1) return { game, bayesianRate: 0 };
+        const bayesianRate = this.findBayesianRating(
+          game.rating,
+          globalRating,
+          nReview,
+          maxNReview,
+        );
+        return { game, bayesianRate };
+      },
+    );
+    gameWithBayesian = gameWithBayesian.sort(
+      (a, b) => b.bayesianRate - a.bayesianRate,
+    );
+    const topLimit = 5;
+    const tops = gameWithBayesian.slice(0, topLimit);
+    return tops.map((item) => item.game);
+  }
+
+  private findBayesianRating(
+    rating: number,
+    globalRating: number,
+    nReview: number,
+    maxNReview: number,
+  ) {
+    const weightFactor = nReview / maxNReview;
+    const bayesianRating =
+      weightFactor * rating + (1 - weightFactor) * globalRating;
+    return bayesianRating;
+  }
+
+  public async findGlobalAverageRating() {
+    const result = await this.gameRepository
+      .createQueryBuilder('games')
+      .select('AVG(rating) AS globalRating')
+      .where('rating IS NOT NULL')
+      .getRawOne();
+    return Number.parseFloat(result.globalRating);
+  }
+
+  public async countReviews(gameIds: number[]) {
+    const results = await this.reviewRepository
+      .createQueryBuilder('reviews')
+      .select('game_id')
+      .addSelect('COUNT(game_id) as reviews')
+      .where('game_id IN (:...ids)', { ids: gameIds })
+      .groupBy('game_id')
+      .getRawMany();
+    const reviewCounts: ReviewCount[] = results.map((item) => {
+      return { gameId: item.game_id, count: +item.reviews };
+    });
+    return reviewCounts;
+  }
+
+  public async countReview(gameId: number) {
+    const result = await this.reviewRepository
+      .createQueryBuilder('reviews')
+      .select('game_id')
+      .addSelect('COUNT(game_id) as reviews')
+      .where('game_id = :gameId', { gameId })
+      .groupBy('game_id')
+      .getRawOne();
+    const reviewCount: ReviewCount = {
+      gameId: result.game_id,
+      count: +result.reviews,
+    };
+    return reviewCount;
   }
 }

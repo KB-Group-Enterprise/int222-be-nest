@@ -7,6 +7,34 @@ type Publisher {
   publisherName: String!
 }
 
+type Category {
+  categoryId: Int!
+  categoryName: String!
+}
+
+type GameImage {
+  name: String!
+}
+
+type Retailer {
+  retailerId: Int!
+  retailerName: String!
+}
+
+type Game {
+  gameId: Int!
+  gameName: String!
+  basePrice: Float!
+  description: String!
+  publisher: Publisher!
+  categories: [Category!]!
+  retailers: [Retailer!]!
+  images: [GameImage!]!
+  rating: Int
+  reviews: [Review!]!
+  releaseDate: String!
+}
+
 type RestoreQuestion {
   questionId: Float!
   question: String!
@@ -39,34 +67,6 @@ type Review {
   reviewer: User!
   game: Game!
   votes: [Vote!]!
-}
-
-type GameImage {
-  name: String!
-}
-
-type Retailer {
-  retailerId: Int!
-  retailerName: String!
-}
-
-type Game {
-  gameId: Int!
-  gameName: String!
-  basePrice: Float!
-  description: String!
-  publisher: Publisher!
-  categories: [Category!]!
-  retailers: [Retailer!]!
-  images: [GameImage!]!
-  rating: Int
-  reviews: [Review!]!
-  releaseDate: String!
-}
-
-type Category {
-  categoryId: Int!
-  categoryName: String!
 }
 
 type DeleteOutput {
@@ -110,6 +110,7 @@ type Query {
   game(gameId: Int!): Game!
   gameWithReviews(gameId: Int!): Game!
   games: [Game!]!
+  popularGames: [Game!]!
   searchGames(gameName: String!): [Game!]!
   paginateGames(limit: Int!, page: Int!, filterBy: [String!], filter: [String!], sortBy: String, order: String): GamePaginationOutput!
   categories: [Category!]!
@@ -124,6 +125,7 @@ type Query {
   reviews: [Review!]!
   review(id: Int!): Review!
   reviewByGameId(id: Int!): [Review!]!
+  reviewByUserId(id: String!): [Review!]!
   votes: [Vote!]!
 }
 

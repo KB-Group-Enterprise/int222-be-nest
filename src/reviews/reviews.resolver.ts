@@ -6,6 +6,7 @@ import { UpdateReviewInput } from './dto/update-review.input';
 import { ResponseStatus } from 'src/common/graphql/commons.class';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/gql-guard';
+import { FindReviewByUserArgs } from './dto/args/find-review-by-user.args';
 
 @Resolver(() => Review)
 export class ReviewsResolver {
@@ -32,6 +33,12 @@ export class ReviewsResolver {
   @Query(() => [Review], { name: 'reviewByGameId' })
   findByGameId(@Args('id', { type: () => Int }) id: number) {
     return this.reviewsService.findbyGameId(id);
+  }
+
+  @Query(() => [Review], { name: 'reviewByUserId' })
+  @UseGuards(GqlAuthGuard)
+  findByUserId(@Args('id', { type: () => String }) userId: string) {
+    return this.reviewsService.findReviewsByUser({ userId });
   }
 
   @Mutation(() => Review)
