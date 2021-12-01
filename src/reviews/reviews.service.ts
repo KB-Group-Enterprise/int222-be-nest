@@ -142,6 +142,6 @@ export class ReviewsService {
       where: { reviewer: { userId: findArgs.userId } },
       relations: ['game'],
     });
-    return reviews;
+    return reviews.filter((review) => review.game !== null);
   }
 }

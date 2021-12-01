@@ -29,12 +29,12 @@ export class Review implements IReview {
   @Field()
   comment: string;
 
-  @ManyToOne((type) => User, { onDelete: 'SET NULL' })
+  @ManyToOne((type) => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'reviewer_id' })
   @Field((type) => User)
   reviewer: User;
 
-  @ManyToOne((type) => Game, { onDelete: 'SET NULL' })
+  @ManyToOne((type) => Game, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'game_id' })
   @Field((type) => Game)
   game: Game;
