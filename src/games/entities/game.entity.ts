@@ -48,7 +48,7 @@ export class Game implements IGame {
     eager: true,
   })
   @JoinColumn({ name: 'publisher_id' })
-  @Field((type) => Publisher)
+  @Field((type) => Publisher, { nullable: true })
   publisher: Publisher;
 
   @ManyToMany(() => Category, (category) => category.games, {

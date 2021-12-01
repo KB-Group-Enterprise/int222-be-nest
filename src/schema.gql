@@ -26,7 +26,7 @@ type Game {
   gameName: String!
   basePrice: Float!
   description: String!
-  publisher: Publisher!
+  publisher: Publisher
   categories: [Category!]!
   retailers: [Retailer!]!
   images: [GameImage!]!
