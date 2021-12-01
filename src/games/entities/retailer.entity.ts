@@ -14,6 +14,6 @@ export class Retailer implements IRetailer {
   @Field()
   retailerName: string;
 
-  @ManyToMany(() => Game, (game) => game.retailers)
+  @ManyToMany(() => Game, (game) => game.retailers, { onDelete: 'CASCADE' })
   games: Game[];
 }

@@ -14,6 +14,6 @@ export class Category implements ICategory {
   @Field()
   categoryName: string;
 
-  @ManyToMany(() => Game, (game) => game.categories)
+  @ManyToMany(() => Game, (game) => game.categories, { onDelete: 'CASCADE' })
   games: Game[];
 }
