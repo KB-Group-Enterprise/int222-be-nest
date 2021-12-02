@@ -187,9 +187,13 @@ export class GamesService {
     await this.gameRepository.findOneOrFail(gameId).catch(() => {
       throw new NotFoundException();
     });
-    await this.deleteImagesByGame(gameId);
+    try {
+      await this.deleteImagesByGame(gameId);
+    } catch (e) {
+      console.log(e);
+    }
     await this.gameRepository.delete(gameId).catch((err) => {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(err);
     });
     return { gameId, status: 'success' };
   }
